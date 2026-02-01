@@ -1,0 +1,171 @@
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h1 class="display-6 fw-bold mb-1" style="font-family: var(--kh-font-display); color: var(--kh-text-primary);">Gestione Fasi</h1>
+            <p class="text-muted mb-0">Personalizza i tipi di attività per classificare le fasi delle tue ricette.</p>
+        </div>
+        <a routerLink="/" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i>Torna alla Home
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Form Section -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 2rem; z-index: 10;">
+                <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-solid fa-gear me-2" style="color: var(--kh-primary);"></i>{{ editingId() ? 'Modifica Fase' : 'Nuova Fase' }}
+                    </h5>
+                </div>
+                <div class="card-body px-4 pb-4 pt-0">
+                    <form (submit)="save()">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Nome</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" [(ngModel)]="formModel.name" name="name" placeholder="Es. Autoli" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Descrizione</label>
+                            <textarea class="form-control bg-light border-0 rounded-3" [(ngModel)]="formModel.description" name="description" rows="3" placeholder="Breve descrizione dell'attività..."></textarea>
+                        </div>
+                        
+                        <div class="row g-2 mb-3">
+                             <div class="col-8">
+                                 <label class="form-label small text-muted fw-medium mb-2">Icona</label>
+                                 <app-icon-picker 
+                                     [icons]="availableIcons" 
+                                     [value]="formModel.icon || 'fa-solid fa-circle'"
+                                     [previewColor]="formModel.color || '#6c757d'"
+                                     (valueChange)="formModel.icon = $event">
+                                 </app-icon-picker>
+                             </div>
+                             <div class="col-4">
+                                 <label class="form-label small text-muted fw-medium mb-2">Colore</label>
+                                 <div class="d-flex align-items-center bg-light border-0 rounded-3 p-1">
+                                    <input type="color" class="form-control form-control-color border-0 bg-transparent w-100" 
+                                           [(ngModel)]="formModel.color" name="color" title="Scegli colore">
+                                 </div>
+                             </div>
+                        </div>
+
+                        <div class="mb-3">
+                             <label class="form-label small text-muted fw-medium mb-2">Anteprima</label>
+                             <div class="p-3 rounded-3 border text-center" 
+                                  [style.background-color]="formModel.color + '20'" 
+                                  [style.color]="formModel.color">
+                                  <i [class]="(formModel.icon || 'fa-solid fa-circle') + ' fs-4'"></i>
+                                  <span class="d-block fw-bold mt-1">{{ formModel.name || 'Nome Fase' }}</span>
+                             </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small text-muted fw-medium mb-2">Tipo di Attività</label>
+                            <div class="p-3 rounded-3 bg-light d-flex align-items-center">
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" id="isActiveWork" [(ngModel)]="formModel.isActiveWork" name="isActiveWork">
+                                    <label class="form-check-label fw-medium ms-2" for="isActiveWork">Fase Attiva (Lavoro)</label>
+                                </div>
+                            </div>
+                            <div class="form-text small mt-2">
+                                <i class="fa-solid fa-circle-info me-1"></i>
+                                Se attivo, il tempo di questa fase verrà conteggiato nel "Tempo di Preparazione (Active)".
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                             <button type="submit" class="btn btn-danger py-2 rounded-3">
+                                 {{ editingId() ? 'Aggiorna Modifiche' : 'Crea Fase' }}
+                             </button>
+                             @if (editingId()) {
+                                 <button type="button" class="btn btn-light text-muted py-2 rounded-3" (click)="cancelEdit()">Annulla</button>
+                             }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- List Section -->
+        <div class="col-lg-8">
+             <div class="card border-0 shadow-sm">
+                 <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-solid fa-list-check me-2" style="color: var(--kh-primary);"></i>Fasi Disponibili
+                    </h5>
+                 </div>
+                 <div class="card-body p-0">
+                     <div class="table-responsive">
+                         <table class="table table-hover mb-0 align-middle">
+                             <thead class="bg-light">
+                                 <tr>
+                                     <th class="ps-4 py-3 text-muted small fw-medium border-0">Nome</th>
+                                     <th class="py-3 text-muted small fw-medium border-0">Categoria</th>
+                                     <th class="py-3 text-muted small fw-medium border-0">Descrizione</th>
+                                     <th class="text-end pe-4 py-3 text-muted small fw-medium border-0">Azioni</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 @for (type of phaseTypes(); track type.id) {
+                                     <tr>
+                                         <td class="ps-4 fw-bold text-dark">
+                                             <div class="d-flex align-items-center gap-2">
+                                                 <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                      [style.background-color]="(type.color || '#6c757d') + '30'"
+                                                      [style.color]="type.color || '#6c757d'"
+                                                      style="width: 36px; height: 36px;">
+                                                     <i [class]="type.icon || 'fa-solid fa-circle'"></i>
+                                                 </div>
+                                                 {{ type.name }}
+                                             </div>
+                                         </td>
+                                         <td>
+                                             @if (type.isActiveWork) {
+                                                 <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill border border-warning border-opacity-25">
+                                                     <i class="fa-solid fa-person-walking me-1"></i>Attiva
+                                                 </span>
+                                             } @else {
+                                                 <span class="badge bg-info bg-opacity-10 text-info px-3 py-2 rounded-pill border border-info border-opacity-25">
+                                                     <i class="fa-solid fa-hourglass-half me-1"></i>Attesa
+                                                 </span>
+                                             }
+                                         </td>
+                                         <td class="text-muted small text-truncate" style="max-width: 200px;">
+                                             {{ type.description || '-' }}
+                                         </td>
+                                         <td class="text-end pe-4">
+                                             <button class="btn btn-sm btn-light text-warning me-1 rounded-3" 
+                                                     (click)="edit(type)" title="Modifica">
+                                                 <i class="fa-solid fa-pencil"></i>
+                                             </button>
+                                             @if (!type.isSystemDefault) {
+                                                 <button class="btn btn-sm btn-light text-danger rounded-3" 
+                                                         (click)="delete(type)" title="Elimina">
+                                                     <i class="fa-solid fa-trash"></i>
+                                                 </button>
+                                             } @else {
+                                                 <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" title="Default di sistema">
+                                                     <button class="btn btn-sm btn-light text-muted rounded-3" disabled>
+                                                         <i class="fa-solid fa-lock"></i>
+                                                     </button>
+                                                 </span>
+                                             }
+                                         </td>
+                                     </tr>
+                                 }
+                                 @empty {
+                                     <tr>
+                                         <td colspan="4" class="text-center py-5 text-muted">
+                                             <i class="fa-solid fa-inbox fs-1 d-block mb-3 opacity-25"></i>
+                                             Nessun tipo di fase trovato.
+                                         </td>
+                                     </tr>
+                                 }
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "RECIPES": "Ricette",
+    "COMMUNITY": "Community",
+    "PROFILE": "Profilo",
+    "SEARCH_PLACEHOLDER": "Cerca ricette, trucchi e altro...",
+    "LOGOUT": "Esci",
+    "DARK_MODE": "Modalità scura",
+    "LIGHT_MODE": "Modalità chiara",
+    "LANGUAGE": "Lingua"
+  },
+  "SIDEBAR": {
+    "HOME": "Home",
+    "RECIPES": "Ricette", 
+    "COMMUNITY": "Community",
+    "PROFILE": "Profilo",
+    "SETTINGS": "Impostazioni",
+    "HELP": "Aiuto"
+  },
+  "RECIPE_LIST": {
+    "TITLE": "Le Tue Ricette",
+    "SUBTITLE": "Archivia, organizza e perfeziona le tue creazioni",
+    "NEW_RECIPE": "Nuova Ricetta",
+    "ALL_CATEGORIES": "Tutte",
+    "RESET_FILTERS": "Reset",
+    "EMPTY_TITLE": "Nessuna ricetta trovata",
+    "EMPTY_MESSAGE": "Prova a modificare i filtri o crea la tua prima ricetta",
+    "CREATE_RECIPE": "Crea Ricetta",
+    "SETTINGS": "Impostazioni",
+    "MANAGE_PHASES": "Gestisci Fasi",
+    "MANAGE_CATEGORIES": "Gestisci Categorie",
+    "MANAGE_TAGS": "Gestisci Tags"
+  },
+  "RECIPE_CARD": {
+    "NEW": "Nuovo",
+    "POPULAR": "Popolare",
+    "ADD_FAVORITE": "Aggiungi ai preferiti",
+    "REMOVE_FAVORITE": "Rimuovi dai preferiti"
+  },
+  "FEATURED_BAKER": {
+    "TITLE": "Featured Baker",
+    "CONNECT": "Connect",
+    "RECIPES": "ricette"
+  },
+  "TRENDING": {
+    "TITLE": "Trending Now"
+  },
+  "COMMON": {
+    "LOADING": "Caricamento...",
+    "ERROR": "Si è verificato un errore",
+    "RETRY": "Riprova",
+    "CANCEL": "Annulla",
+    "SAVE": "Salva",
+    "DELETE": "Elimina",
+    "EDIT": "Modifica",
+    "VIEW": "Visualizza",
+    "CLOSE": "Chiudi"
+  },
+  "DIFFICULTY": {
+    "EASY": "Facile",
+    "MEDIUM": "Media",
+    "HARD": "Difficile",
+    "PROFESSIONAL": "Pro"
+  },
+  "COMING_SOON": {
+    "TITLE": "In arrivo!",
+    "MESSAGE": "Questa sezione sarà disponibile presto.",
+    "BACK_HOME": "Torna alla Home"
+  },
+  "LANGUAGE": {
+    "LABEL": "Lingua",
+    "IT": "Italiano",
+    "EN": "English"
+  },
+  "LOGIN": {
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "SIGN_IN": "Accedi",
+    "SIGNING_IN": "Accesso...",
+    "SIGN_UP": "Registrati",
+    "FORGOT_PASSWORD": "Password dimenticata",
+    "NO_ACCOUNT": "Non hai un account?",
+    "ERROR_INVALID": "Credenziali non valide o errore del server."
+  }
+}

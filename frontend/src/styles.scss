@@ -1,0 +1,460 @@
+// =============================================================================
+// KneadHub - Main Stylesheet
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Bootstrap Configuration (MUST come first with @use)
+// -----------------------------------------------------------------------------
+$primary: #D2691E;
+$secondary: #3D2B1F;
+$success: #27ae60;
+$warning: #f39c12;
+$danger: #E63946;
+$info: #3498db;
+
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-rounded: true;
+
+$border-radius: 0.5rem;
+$border-radius-lg: 1rem;
+$border-radius-sm: 0.25rem;
+
+// Import Bootstrap with @use (must be before @import)
+@use 'bootstrap/scss/bootstrap';
+
+// -----------------------------------------------------------------------------
+// External CSS Imports (after @use)
+// -----------------------------------------------------------------------------
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import '@ng-select/ng-select/themes/default.theme.css';
+
+// -----------------------------------------------------------------------------
+// KneadHub Theme System
+// -----------------------------------------------------------------------------
+@import 'styles/variables';
+@import 'styles/theme-dark';
+@import 'styles/animations';
+@import 'styles/components';
+
+// -----------------------------------------------------------------------------
+// Global Base Styles
+// -----------------------------------------------------------------------------
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--kh-background);
+  color: var(--kh-text-primary);
+  font-family: var(--kh-font-body);
+  line-height: var(--kh-line-height-normal);
+  min-height: 100vh;
+}
+
+// Simple cream background (flat design like mockup)
+.kh-kitchen-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--kh-background);
+  z-index: -1;
+}
+
+// -----------------------------------------------------------------------------
+// Typography
+// -----------------------------------------------------------------------------
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--kh-font-display);
+  font-weight: var(--kh-font-weight-bold);
+  color: var(--kh-text-primary);
+  line-height: var(--kh-line-height-tight);
+}
+
+h1 {
+  font-size: var(--kh-font-size-4xl);
+}
+
+h2 {
+  font-size: var(--kh-font-size-3xl);
+}
+
+h3 {
+  font-size: var(--kh-font-size-2xl);
+}
+
+h4 {
+  font-size: var(--kh-font-size-xl);
+}
+
+a {
+  color: var(--kh-primary);
+  text-decoration: none;
+  transition: color var(--kh-transition-fast);
+  
+  &:hover {
+    color: var(--kh-accent);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Layout - 3 Column Grid (Full Width, Airy Design)
+// -----------------------------------------------------------------------------
+.kh-layout {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: 1fr;
+  grid-template-columns: var(--kh-sidebar-width) 1fr var(--kh-aside-width);
+  grid-template-areas:
+    "sidebar main aside";
+  width: 100%;
+  background: transparent;
+  
+  @media (max-width: 1199px) {
+    grid-template-columns: 1fr;
+    grid-template-areas: "main";
+  }
+  
+  @media (max-width: 767px) {
+    grid-template-rows: 1fr;
+    grid-template-areas: "main";
+    padding-bottom: var(--kh-bottom-nav-height);
+  }
+}
+
+.kh-navbar {
+  grid-area: navbar;
+  position: sticky;
+  top: 0;
+  z-index: var(--kh-z-sticky);
+}
+
+.kh-sidebar {
+  grid-area: sidebar;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  background: transparent;
+  padding: 0;
+  
+  @media (max-width: 1199px) {
+    display: none;
+    
+    &.open {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--kh-sidebar-width);
+      height: 100vh;
+      background: var(--kh-surface);
+      box-shadow: var(--kh-shadow-xl);
+      z-index: var(--kh-z-fixed);
+      animation: kh-slide-in-left var(--kh-transition-slow) ease-out;
+    }
+  }
+}
+
+.kh-main {
+  grid-area: main;
+  padding: var(--kh-spacing-lg) var(--kh-spacing-xl);
+  overflow-y: auto;
+  min-height: 100vh;
+  
+  @media (max-width: 1199px) {
+    padding: var(--kh-spacing-md);
+  }
+}
+
+.kh-aside {
+  grid-area: aside;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--kh-spacing-lg);
+  padding-top: var(--kh-navbar-height);
+  background: transparent; // Transparent, panels have their own background
+  
+  // Hide scrollbar but keep functionality
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE/Edge
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari/Opera
+  }
+  
+  @media (max-width: 1199px) {
+    display: none;
+  }
+}
+
+.kh-bottom-nav {
+  grid-area: bottomnav;
+  display: none;
+  
+  @media (max-width: 767px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--kh-bottom-nav-height);
+    background: var(--kh-surface);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: var(--kh-z-fixed);
+    border-radius: var(--kh-radius-md) var(--kh-radius-md) 0 0;
+  }
+}
+
+// Header bar inside main content
+.kh-header-bar {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: var(--kh-sidebar-width);
+  right: 0;
+  z-index: var(--kh-z-fixed);
+  background: var(--kh-background);
+  padding: 0 var(--kh-spacing-xl);
+  
+  @media (max-width: 1199px) {
+    left: 0;
+    padding: 0 var(--kh-spacing-md);
+  }
+}
+
+// Add top padding to main content to compensate for fixed header
+.kh-main {
+  padding-top: calc(var(--kh-navbar-height) + var(--kh-spacing-md));
+}
+
+// Sidebar overlay backdrop
+.kh-sidebar-backdrop {
+  display: none;
+  
+  @media (max-width: 1199px) {
+    &.open {
+      display: block;
+      position: fixed;
+      top: var(--kh-navbar-height);
+      left: 0;
+      width: 100%;
+      height: calc(100vh - var(--kh-navbar-height));
+      background: rgba(0, 0, 0, 0.5);
+      z-index: calc(var(--kh-z-fixed) - 1);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Cards - Enhanced Bootstrap
+// -----------------------------------------------------------------------------
+.card {
+  border: none;
+  border-radius: var(--kh-radius-md);
+  box-shadow: var(--kh-shadow-md);
+  background: var(--kh-surface);
+  transition: transform var(--kh-transition-base), box-shadow var(--kh-transition-base);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--kh-shadow-card-hover);
+  }
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-family: var(--kh-font-display);
+  font-weight: var(--kh-font-weight-semibold);
+}
+
+// -----------------------------------------------------------------------------
+// Buttons - Enhanced Bootstrap
+// -----------------------------------------------------------------------------
+.btn {
+  border-radius: var(--kh-radius-sm);
+  padding: 0.6rem 1.2rem;
+  font-weight: var(--kh-font-weight-semibold);
+  text-transform: uppercase;
+  font-size: var(--kh-font-size-sm);
+  letter-spacing: 0.5px;
+  transition: all var(--kh-transition-base);
+}
+
+.btn-primary {
+  background: var(--kh-gradient-button);
+  border: none;
+  color: white;
+  
+  &:hover {
+    background: var(--kh-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--kh-shadow-md);
+  }
+}
+
+.btn-outline-primary {
+  border-color: var(--kh-primary);
+  color: var(--kh-primary);
+  
+  &:hover {
+    background: var(--kh-primary);
+    border-color: var(--kh-primary);
+    color: white;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Forms - Enhanced Bootstrap
+// -----------------------------------------------------------------------------
+.form-control {
+  border-radius: var(--kh-radius-sm);
+  padding: 0.75rem 1rem;
+  border: 2px solid transparent;
+  background: var(--kh-surface);
+  transition: all var(--kh-transition-fast);
+  
+  &:focus {
+    border-color: var(--kh-accent);
+    box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.2);
+  }
+  
+  &::placeholder {
+    color: var(--kh-text-muted);
+  }
+}
+
+.form-label {
+  font-weight: var(--kh-font-weight-medium);
+  color: var(--kh-text-primary);
+  margin-bottom: var(--kh-spacing-xs);
+}
+
+// -----------------------------------------------------------------------------
+// ng-select Customization
+// -----------------------------------------------------------------------------
+.ng-dropdown-panel {
+  z-index: 9999 !important;
+  border-radius: var(--kh-radius-sm);
+  box-shadow: var(--kh-shadow-lg);
+}
+
+.ng-select {
+  .ng-select-container {
+    border-radius: var(--kh-radius-sm);
+    border: 2px solid transparent;
+    min-height: 42px;
+    
+    &:hover {
+      border-color: var(--kh-text-muted);
+    }
+  }
+  
+  &.ng-select-focused {
+    .ng-select-container {
+      border-color: var(--kh-accent);
+      box-shadow: 0 0 0 3px rgba(244, 162, 97, 0.2);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Scrollbar Styling
+// -----------------------------------------------------------------------------
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--kh-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--kh-text-muted);
+  border-radius: var(--kh-radius-full);
+  
+  &:hover {
+    background: var(--kh-text-secondary);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Selection
+// -----------------------------------------------------------------------------
+::selection {
+  background: var(--kh-accent);
+  color: white;
+}
+
+// -----------------------------------------------------------------------------
+// Responsive utilities
+// -----------------------------------------------------------------------------
+.hide-desktop {
+  @media (min-width: 1200px) {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @media (min-width: 768px) and (max-width: 1199px) {
+    display: none !important;
+  }
+}
+
+.hide-mobile {
+  @media (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+.show-mobile-only {
+  display: none !important;
+  
+  @media (max-width: 767px) {
+    display: block !important;
+  }
+}
+
+.show-tablet-up {
+  display: none !important;
+  
+  @media (min-width: 768px) {
+    display: block !important;
+  }
+}
+
+// =============================================================================
+// Mobile-First Container & Layout Adjustments
+// =============================================================================
+@media (max-width: 767.98px) {
+  // Reduce container padding on mobile
+  .container,
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  // Reduce vertical padding
+  .py-4 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+  
+  .py-5 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  // Cards edge-to-edge on mobile
+  .card {
+    border-radius: 0.75rem;
+  }
+}
+
+

@@ -1,0 +1,30 @@
+// =============================================================================
+// Ingredient Archive Manager Styles
+// =============================================================================
+
+// Ingredient icon in table
+.ingredient-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+// ng-select custom styling
+::ng-deep {
+  .custom-ng-select {
+    .ng-select-container {
+      background-color: #f8f9fa;
+      border: none;
+      border-radius: 0.75rem;
+      min-height: 38px;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 991.98px) {
+  .table-responsive {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}

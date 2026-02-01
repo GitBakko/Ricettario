@@ -1,0 +1,37 @@
+.tag-input-container {
+    position: relative;
+}
+
+.selected-tags .badge {
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.suggestions-dropdown {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+    
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+    
+    &.create-new {
+        background-color: rgba(25, 135, 84, 0.05);
+        
+        &:hover {
+            background-color: rgba(25, 135, 84, 0.1);
+        }
+    }
+}
+
+.tag-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}

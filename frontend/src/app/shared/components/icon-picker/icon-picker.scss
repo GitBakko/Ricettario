@@ -1,0 +1,116 @@
+.icon-picker {
+  position: relative;
+}
+
+.icon-picker-trigger {
+  cursor: pointer;
+  min-height: 42px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--kh-background-muted, #e9ecef) !important;
+  }
+  
+  &.open {
+    box-shadow: 0 0 0 0.2rem rgba(var(--kh-primary-rgb, 220, 53, 69), 0.15);
+  }
+  
+  .icon-preview {
+    width: 24px;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
+  .icon-label {
+    font-size: 0.9rem;
+  }
+  
+  .dropdown-arrow {
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+    color: var(--kh-text-muted, #6c757d);
+    
+    &.rotate {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.icon-picker-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 320px;
+  width: max-content;
+  background: white;
+  z-index: 1050;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  
+  .dropdown-search {
+    background: var(--kh-background, #f8f9fa);
+    flex-shrink: 0;
+    
+    .input-group-text {
+      padding-left: 0.5rem;
+      padding-right: 0;
+    }
+  }
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 6px;
+  overflow-y: auto;
+  max-height: 280px;
+  min-height: 100px;
+  padding: 8px;
+}
+
+.icon-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  
+  &:hover {
+    background: var(--kh-background-muted, #e9ecef);
+  }
+  
+  &.selected {
+    background: var(--kh-primary-light, rgba(220, 53, 69, 0.1));
+    
+    .icon-name {
+      color: var(--kh-primary, #dc3545);
+      font-weight: 600;
+    }
+  }
+  
+  .icon-display {
+    font-size: 1.25rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .icon-name {
+    font-size: 0.7rem;
+    color: var(--kh-text-muted, #6c757d);
+    text-align: center;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

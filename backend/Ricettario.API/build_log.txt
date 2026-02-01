@@ -1,0 +1,11 @@
+  Individuazione dei progetti da ripristinare...
+  Tutti i progetti sono aggiornati per il ripristino.
+D:\Develop\AI\Ricettario\backend\Ricettario.API\Program.cs(24,6): error CS1061: 'AuthenticationBuilder' non contiene una definizione di 'AddGoogle' e non ├¿ stato trovato alcun metodo di estensione accessibile 'AddGoogle' che accetta un primo argomento di tipo 'AuthenticationBuilder'. Probabilmente manca una direttiva using o un riferimento all'assembly. [D:\Develop\AI\Ricettario\backend\Ricettario.API\Ricettario.API.csproj]
+
+Compilazione NON RIUSCITA.
+
+D:\Develop\AI\Ricettario\backend\Ricettario.API\Program.cs(24,6): error CS1061: 'AuthenticationBuilder' non contiene una definizione di 'AddGoogle' e non ├¿ stato trovato alcun metodo di estensione accessibile 'AddGoogle' che accetta un primo argomento di tipo 'AuthenticationBuilder'. Probabilmente manca una direttiva using o un riferimento all'assembly. [D:\Develop\AI\Ricettario\backend\Ricettario.API\Ricettario.API.csproj]
+    Avvisi: 0
+    Errori: 1
+
+Tempo trascorso 00:00:01.14

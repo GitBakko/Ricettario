@@ -1,0 +1,462 @@
+// =============================================================================
+// Recipe Detail - Mobile-First Responsive Styles
+// =============================================================================
+
+// Timeline custom styling
+.timeline {
+    position: relative;
+    padding-left: 0;
+}
+
+// Custom utility classes for transitions and hover effects
+.transition-base {
+    transition: all 0.2s ease-in-out;
+}
+
+.transition-hover {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.075) !important;
+    }
+}
+
+.hover-bg-light {
+    &:hover {
+        background-color: rgba(var(--bs-light-rgb), 0.5) !important;
+    }
+}
+
+// Glassmorphism utilities
+.glass-effect {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+// =============================================================================
+// Mobile Responsive Overrides
+// =============================================================================
+
+// Container padding adjustments - Full width on mobile
+@media (max-width: 767.98px) {
+    .container.py-5 {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    // Row negative margins compensation
+    .row.g-4 {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        
+        > [class*="col-"] {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+    }
+}
+
+// =============================================================================
+// Recipe Header - Mobile Optimizations
+// =============================================================================
+.recipe-header {
+    @media (max-width: 767.98px) {
+        min-height: 280px !important;
+        
+        .display-3 {
+            font-size: 1.75rem !important;
+            line-height: 1.2;
+        }
+        
+        .lead {
+            font-size: 0.9rem !important;
+        }
+    }
+}
+
+// Header content mobile
+@media (max-width: 767.98px) {
+    // Reduce header image height on mobile
+    .rounded-4.overflow-hidden.mb-4.shadow-lg {
+        min-height: 260px !important;
+        border-radius: 1rem !important;
+    }
+    
+    // Title size reduction
+    .display-3 {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    // Lead text
+    .lead {
+        font-size: 0.875rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    // Stats grid - Stack vertically on small screens
+    .d-flex.flex-wrap.gap-4.border-top {
+        gap: 0.75rem !important;
+        padding-top: 0.75rem !important;
+        flex-direction: column;
+        
+        > .d-flex.align-items-center {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+    
+    // Icon circles - smaller on mobile
+    .rounded-circle[style*="width: 42px"] {
+        width: 36px !important;
+        height: 36px !important;
+        
+        i {
+            font-size: 1rem !important;
+        }
+    }
+    
+    // Top bar buttons
+    .btn-sm.rounded-pill {
+        font-size: 0.75rem !important;
+        padding: 0.35rem 0.75rem !important;
+    }
+}
+
+// =============================================================================
+// Action Buttons - Mobile Layout
+// =============================================================================
+@media (max-width: 767.98px) {
+    // Top bar - Make it more compact
+    .d-flex.flex-column.gap-3.align-items-end {
+        gap: 0.5rem !important;
+        
+        // First row with back + edit buttons
+        > .d-flex.justify-content-between {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            
+            .d-flex.gap-2 {
+                gap: 0.35rem !important;
+                flex-wrap: wrap;
+            }
+        }
+    }
+    
+    // Hide text, show only icons on very small screens
+    @media (max-width: 480px) {
+        .btn-sm.rounded-pill {
+            span:not(.badge) {
+                display: none;
+            }
+            
+            i {
+                margin: 0 !important;
+            }
+        }
+    }
+}
+
+// =============================================================================
+// Cards - Mobile Layout
+// =============================================================================
+@media (max-width: 767.98px) {
+    .card {
+        border-radius: 0.75rem !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        
+        .card-header {
+            padding: 0.875rem 1rem !important;
+            
+            h5 {
+                font-size: 1rem !important;
+            }
+        }
+        
+        .card-body {
+            padding: 0.875rem 1rem !important;
+        }
+    }
+    
+    // Header image full width
+    .rounded-4.overflow-hidden.mb-4.shadow-lg {
+        border-radius: 0 !important;
+        margin-left: -0.5rem !important;
+        margin-right: -0.5rem !important;
+        width: calc(100% + 1rem) !important;
+    }
+    
+    // Calculator inputs
+    .form-control {
+        padding: 0.5rem !important;
+        font-size: 1rem !important;
+    }
+    
+    // Ingredients list
+    .list-group-item {
+        padding: 0.75rem 1rem !important;
+        
+        .fw-medium {
+            font-size: 0.875rem !important;
+        }
+        
+        .fs-5 {
+            font-size: 1rem !important;
+        }
+    }
+}
+
+// =============================================================================
+// Timeline (Phases) - CRITICAL Mobile Fix
+// =============================================================================
+.timeline {
+    @media (max-width: 767.98px) {
+        // Hide the vertical line on mobile - use simpler layout
+        > .position-absolute {
+            display: none !important;
+        }
+    }
+}
+
+.timeline-item {
+    @media (max-width: 767.98px) {
+        padding-left: 0 !important;
+        padding-bottom: 1rem !important;
+        
+        // Hide the marker circle on mobile
+        > .position-absolute.rounded-circle {
+            display: none !important;
+        }
+        
+        // Card takes full width
+        > .card {
+            margin-left: 0 !important;
+            border-radius: 1rem !important;
+            
+            .card-body {
+                padding: 1rem !important;
+            }
+        }
+    }
+}
+
+// Phase card content - Mobile
+@media (max-width: 767.98px) {
+    .timeline-item .card {
+        // Phase header row
+        .d-flex.flex-wrap.justify-content-between.align-items-center.mb-3 {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem !important;
+            
+            // Phase title
+            h5 {
+                font-size: 1rem !important;
+                margin-bottom: 0.25rem;
+            }
+            
+            // Badges container
+            .d-flex.gap-2 {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 0.35rem !important;
+                
+                .badge {
+                    font-size: 0.7rem !important;
+                    padding: 0.35rem 0.6rem !important;
+                }
+            }
+        }
+        
+        // Description text
+        .card-text {
+            font-size: 0.875rem !important;
+            line-height: 1.5 !important;
+            margin-bottom: 0.75rem !important;
+        }
+        
+        // Phase ingredients box
+        .bg-white.rounded-3.p-3 {
+            padding: 0.75rem !important;
+            
+            // Label
+            small.d-block {
+                font-size: 0.65rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            
+            // Ingredient pills container
+            .d-flex.flex-wrap.gap-2 {
+                gap: 0.35rem !important;
+                
+                // Individual ingredient pill
+                > .d-flex.align-items-center {
+                    padding: 0.25rem 0.5rem !important;
+                    font-size: 0.75rem !important;
+                    
+                    .small {
+                        font-size: 0.75rem !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+// Mobile Phase Card - With Phase Type Indicator
+// =============================================================================
+@media (max-width: 767.98px) {
+    .timeline-item > .card {
+        position: relative;
+        overflow: visible !important;
+        
+        // Add colored left border for phase type
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            border-radius: 4px 0 0 4px;
+            background: inherit;
+        }
+    }
+}
+
+// =============================================================================
+// Column Order - Mobile First (Ingredients first, then Phases)
+// =============================================================================
+@media (max-width: 991.98px) {
+    .row.g-4 {
+        > .col-lg-4 {
+            order: 1;
+        }
+        
+        > .col-lg-8 {
+            order: 2;
+        }
+    }
+}
+
+// =============================================================================
+// Video Section - Mobile
+// =============================================================================
+@media (max-width: 767.98px) {
+    .ratio-16x9 {
+        border-radius: 0.75rem !important;
+    }
+}
+
+// =============================================================================
+// Badges & Tags - Mobile
+// =============================================================================
+@media (max-width: 767.98px) {
+    .badge.rounded-pill {
+        font-size: 0.7rem !important;
+        padding: 0.35rem 0.6rem !important;
+    }
+    
+    // Category and tags in header
+    .d-flex.flex-wrap.align-items-center.gap-2.mb-4 {
+        gap: 0.35rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+}
+
+// =============================================================================
+// Custom Scrollbar - Consistent across devices
+// =============================================================================
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+    }
+}
+
+// =============================================================================
+// Touch-friendly Interactions
+// =============================================================================
+@media (max-width: 767.98px) {
+    // Larger touch targets
+    .btn, button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    // Remove hover effects on mobile (touch)
+    .transition-hover:hover {
+        transform: none;
+        box-shadow: none !important;
+    }
+    
+    // Active state for touch
+    .transition-hover:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+}
+
+// =============================================================================
+// Mobile Phase Cards - Clean, Readable Design
+// =============================================================================
+.mobile-phase-card {
+    background: var(--kh-surface, #fff);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+    
+    &:active {
+        transform: scale(0.99);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+    
+    .phase-card-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .phase-number {
+        font-family: var(--kh-font-display);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+    
+    .phase-meta {
+        .badge {
+            font-family: var(--kh-font-body);
+        }
+    }
+    
+    .phase-description {
+        color: var(--kh-text-secondary);
+    }
+    
+    .phase-ingredients {
+        border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+}

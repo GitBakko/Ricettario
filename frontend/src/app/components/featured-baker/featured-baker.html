@@ -1,0 +1,27 @@
+<div class="kh-featured-section">
+  <h3 class="kh-section-title">{{ 'FEATURED_BAKER.TITLE' | translate }}</h3>
+
+  <!-- @MOCK: Baker cards from MOCK_FEATURED_BAKERS -->
+  <div class="kh-baker-list">
+    @for (baker of featuredBakers; track baker.id) {
+      <div class="kh-baker-card">
+        <img [src]="baker.avatar" [alt]="baker.name" class="kh-baker-avatar">
+        
+        <div class="kh-baker-info">
+          <h4 class="kh-baker-name">{{ baker.name }}</h4>
+          
+          <!-- Star Rating -->
+          <div class="kh-baker-rating">
+            @for (star of getStars(baker.rating); track $index) {
+              <i class="fas fa-star" [class.filled]="star === 1"></i>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+  
+  <button class="kh-connect-btn" (click)="onConnectFirst()">
+    {{ 'FEATURED_BAKER.CONNECT' | translate }}
+  </button>
+</div>

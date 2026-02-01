@@ -1,0 +1,82 @@
+// =============================================================================
+// KneadHub Trending Now - Separate Panel with Beige Background
+// =============================================================================
+
+.kh-trending-section {
+  background: rgba(244, 228, 208, 0.5);
+  border-radius: var(--kh-radius-lg);
+  padding: var(--kh-spacing-lg);
+}
+
+.kh-section-title {
+  font-family: var(--kh-font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--kh-text-primary);
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--kh-spacing-md);
+  padding-bottom: var(--kh-spacing-xs);
+  border-bottom: 2px solid rgba(210, 105, 30, 0.2);
+
+  i {
+    display: none;
+  }
+}
+
+.kh-trending-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kh-spacing-xs);
+}
+
+.kh-trending-card {
+  display: flex;
+  align-items: center;
+  gap: var(--kh-spacing-sm);
+  padding: var(--kh-spacing-xs);
+  border-radius: var(--kh-radius-sm);
+  cursor: pointer;
+  transition: all var(--kh-transition-fast);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.kh-trending-thumb {
+  width: 48px;
+  height: 36px;
+  border-radius: var(--kh-radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.kh-trending-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.kh-trending-title {
+  font-family: var(--kh-font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--kh-text-primary);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kh-trending-author {
+  font-size: 0.6875rem;
+  color: var(--kh-text-muted);
+  margin: 0;
+
+  i {
+    display: none;
+  }
+}
+
+.kh-trending-likes {
+  display: none;
+}

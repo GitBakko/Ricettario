@@ -1,0 +1,286 @@
+// =============================================================================
+// KneadHub Animations & Keyframes
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Keyframes
+// -----------------------------------------------------------------------------
+
+// Card entry animation (fade in + slide up)
+@keyframes kh-card-entry {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Heart pulse animation for likes
+@keyframes kh-heart-pulse {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Heart pop animation when clicking like
+@keyframes kh-heart-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Page fade in
+@keyframes kh-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Slide in from left (for sidebar)
+@keyframes kh-slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Slide in from right (for panels)
+@keyframes kh-slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Slide in from bottom (for bottom nav, modals)
+@keyframes kh-slide-in-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Shimmer loading effect
+@keyframes kh-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Bounce subtle
+@keyframes kh-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+// Bell notification shake
+@keyframes kh-bell-shake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+// Scale pulse (for badges, notifications)
+@keyframes kh-scale-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+// Rotate (for loading spinners)
+@keyframes kh-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Animation Classes
+// -----------------------------------------------------------------------------
+
+// Card entry with stagger support
+.kh-animate-card-entry {
+  animation: kh-card-entry var(--kh-transition-slow) ease-out forwards;
+  opacity: 0;
+  
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 50}ms;
+    }
+  }
+}
+
+// Heart like animation
+.kh-animate-heart {
+  transition: transform var(--kh-transition-fast), color var(--kh-transition-fast);
+  
+  &:hover {
+    transform: scale(1.15);
+  }
+  
+  &.liked {
+    animation: kh-heart-pop 0.4s ease;
+    color: var(--kh-like-active);
+  }
+}
+
+// Page transitions
+.kh-animate-page {
+  animation: kh-fade-in var(--kh-transition-slow) ease-out;
+}
+
+// Sidebar slide
+.kh-animate-sidebar {
+  animation: kh-slide-in-left var(--kh-transition-slow) ease-out;
+}
+
+// Panel slide from right
+.kh-animate-panel-right {
+  animation: kh-slide-in-right var(--kh-transition-slow) ease-out;
+}
+
+// Bottom nav slide
+.kh-animate-bottom-nav {
+  animation: kh-slide-in-bottom var(--kh-transition-base) ease-out;
+}
+
+// Shimmer loading skeleton
+.kh-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--kh-surface) 25%,
+    var(--kh-surface-hover) 50%,
+    var(--kh-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: kh-shimmer 1.5s infinite;
+  border-radius: var(--kh-radius-sm);
+}
+
+// Bell notification animation
+.kh-animate-bell {
+  &.has-notification {
+    animation: kh-bell-shake 0.5s ease;
+  }
+}
+
+// Badge pulse
+.kh-animate-badge {
+  animation: kh-scale-pulse 2s infinite;
+}
+
+// Loading spinner
+.kh-spinner {
+  animation: kh-rotate 1s linear infinite;
+}
+
+// -----------------------------------------------------------------------------
+// Hover & Interaction Effects
+// -----------------------------------------------------------------------------
+
+// Card hover lift effect
+.kh-hover-lift {
+  transition: transform var(--kh-transition-base), box-shadow var(--kh-transition-base);
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--kh-shadow-card-hover);
+  }
+}
+
+// Button hover scale
+.kh-hover-scale {
+  transition: transform var(--kh-transition-fast);
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Icon hover rotate
+.kh-hover-rotate {
+  transition: transform var(--kh-transition-base);
+  
+  &:hover {
+    transform: rotate(15deg);
+  }
+}
+
+// Glow effect on hover
+.kh-hover-glow {
+  transition: box-shadow var(--kh-transition-base);
+  
+  &:hover {
+    box-shadow: 0 0 20px rgba(var(--kh-accent), 0.4);
+  }
+}
+
+// Focus ring for accessibility
+.kh-focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--kh-accent);
+    outline-offset: 2px;
+  }
+}

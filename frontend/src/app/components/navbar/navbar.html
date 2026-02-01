@@ -1,0 +1,167 @@
+<header class="kh-header-container">
+  <div class="kh-header-inner">
+    <!-- Left: Hamburger (mobile/tablet only) -->
+    <div class="kh-header-left hide-desktop">
+      <button 
+        class="kh-hamburger-btn" 
+        (click)="onHamburgerClick()"
+        aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Center: Search Bar -->
+    <div class="kh-header-center">
+      <form class="kh-search-wrapper" (submit)="onSearchSubmit($event)">
+        <i class="fas fa-search kh-search-icon"></i>
+        <input 
+          type="text" 
+          class="kh-search-input"
+          [value]="searchQuery()"
+          (input)="onSearchInput($event)"
+          [placeholder]="'NAV.SEARCH_PLACEHOLDER' | translate">
+        @if (searchQuery()) {
+          <button 
+            type="button" 
+            class="kh-search-clear" 
+            (click)="clearSearch()"
+            aria-label="Cancella ricerca">
+            <i class="fas fa-times"></i>
+          </button>
+        }
+      </form>
+    </div>
+
+    <!-- Right: Actions -->
+    <div class="kh-header-right">
+      <!-- Notifications -->
+      <button class="kh-icon-btn" aria-label="Notifiche">
+        <i class="fas fa-bell"></i>
+        @if (notificationCount > 0) {
+          <span class="kh-badge-notification">{{ notificationCount }}</span>
+        }
+      </button>
+
+      <!-- User Avatar & Dropdown -->
+      <div class="kh-dropdown-wrapper">
+        <button 
+          class="kh-avatar-btn"
+          (click)="toggleUserDropdown()"
+          aria-label="Menu utente">
+          @if (avatarUrl()) {
+            <img [src]="avatarUrl()" [alt]="userName" class="kh-avatar">
+          } @else {
+            <div class="kh-avatar kh-avatar-initials">{{ initials() }}</div>
+          }
+        </button>
+        @if (showUserDropdown()) {
+          <div class="kh-dropdown kh-dropdown-right" (click)="$event.stopPropagation()">
+            <!-- User Header with Banner -->
+            <div class="kh-dropdown-header">
+              @if (bannerUrl()) {
+                <div class="kh-dropdown-banner">
+                  <img [src]="bannerUrl()" alt="Banner" class="kh-dropdown-banner-img">
+                </div>
+              }
+              <div class="kh-dropdown-user-row">
+                <div class="kh-dropdown-avatar-wrapper">
+                  @if (avatarUrl()) {
+                    <img [src]="avatarUrl()" [alt]="userName" class="kh-avatar-lg">
+                  } @else {
+                    <div class="kh-avatar-lg kh-avatar-initials">{{ initials() }}</div>
+                  }
+                  <span class="kh-dropdown-status"></span>
+                </div>
+                <div class="kh-dropdown-user-info">
+                  <span class="kh-dropdown-user-name">{{ userName }}</span>
+                  <span class="kh-dropdown-user-email">{{ userEmail }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="kh-dropdown-section">
+              <a routerLink="/profile" class="kh-dropdown-item" (click)="closeDropdowns()">
+                <div class="kh-dropdown-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="kh-dropdown-item-content">
+                  <span class="kh-dropdown-item-label">{{ 'NAV.PROFILE' | translate }}</span>
+                  <span class="kh-dropdown-item-desc">Gestisci il tuo account</span>
+                </div>
+              </a>
+              <a routerLink="/create" class="kh-dropdown-item" (click)="closeDropdowns()">
+                <div class="kh-dropdown-icon kh-dropdown-icon-accent">
+                  <i class="fas fa-plus"></i>
+                </div>
+                <div class="kh-dropdown-item-content">
+                  <span class="kh-dropdown-item-label">{{ 'RECIPE_LIST.NEW_RECIPE' | translate }}</span>
+                  <span class="kh-dropdown-item-desc">Crea una nuova ricetta</span>
+                </div>
+              </a>
+            </div>
+            
+            <!-- Preferences -->
+            <div class="kh-dropdown-section">
+              <div class="kh-dropdown-section-title">Preferenze</div>
+              <!-- Language Selector -->
+              <div class="kh-dropdown-item kh-lang-selector">
+                <div class="kh-dropdown-icon">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <span class="kh-lang-label">{{ 'NAV.LANGUAGE' | translate }}</span>
+                <div class="kh-lang-options">
+                  @for (lang of languages; track lang.code) {
+                    <button 
+                      class="kh-lang-option" 
+                      [class.active]="currentLanguage() === lang.code"
+                      (click)="setLanguage(lang.code)">
+                      {{ lang.flag }}
+                    </button>
+                  }
+                </div>
+              </div>
+              <!-- Theme Toggle -->
+              <button class="kh-dropdown-item" (click)="toggleTheme()">
+                <div class="kh-dropdown-icon">
+                  @if (isDarkMode()) {
+                    <i class="fas fa-sun"></i>
+                  } @else {
+                    <i class="fas fa-moon"></i>
+                  }
+                </div>
+                <div class="kh-dropdown-item-content">
+                  @if (isDarkMode()) {
+                    <span class="kh-dropdown-item-label">{{ 'NAV.LIGHT_MODE' | translate }}</span>
+                  } @else {
+                    <span class="kh-dropdown-item-label">{{ 'NAV.DARK_MODE' | translate }}</span>
+                  }
+                </div>
+                <div class="kh-theme-toggle">
+                  <div class="kh-theme-toggle-track" [class.active]="isDarkMode()">
+                    <div class="kh-theme-toggle-thumb"></div>
+                  </div>
+                </div>
+              </button>
+            </div>
+            
+            <!-- Logout -->
+            <div class="kh-dropdown-footer">
+              <button class="kh-dropdown-item kh-dropdown-item-danger" (click)="logout()">
+                <div class="kh-dropdown-icon">
+                  <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <span class="kh-dropdown-item-label">{{ 'NAV.LOGOUT' | translate }}</span>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Backdrop to close dropdowns when clicking outside -->
+@if (showLanguageDropdown() || showUserDropdown()) {
+  <div class="kh-dropdown-backdrop" (click)="closeDropdowns()"></div>
+}

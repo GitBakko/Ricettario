@@ -1,0 +1,102 @@
+.nav-tabs .nav-link { 
+    color: #6c757d; 
+    cursor: pointer; 
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
+.nav-tabs .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd;
+}
+.nav-tabs .nav-link.active { 
+    border-bottom: 3px solid #0d6efd !important;
+    background-color: white !important;
+    color: #0d6efd !important;
+}
+.border-dashed { border-style: dashed !important; }
+
+.difficulty-card-selector {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent !important;
+}
+.difficulty-card-selector:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+    border-color: #dee2e6 !important;
+}
+.btn-check:checked + .difficulty-card-selector {
+    border-color: var(--bs-primary) !important;
+    background-color: #f8fbff;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1) !important;
+}
+.btn-check:checked + .difficulty-card-selector .check-indicator {
+    opacity: 1;
+    transform: scale(1);
+}
+.check-indicator {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 1.25rem;
+}
+.icon-wrapper {
+    width: 56px;
+    height: 56px;
+    transition: transform 0.2s;
+}
+.difficulty-card-selector:hover .icon-wrapper {
+    transform: scale(1.1);
+}
+.tracking-wide { letter-spacing: 0.05em; }
+
+/* Image Upload Styling */
+.image-upload-zone {
+    border: 2px dashed #dee2e6;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8f9fa;
+}
+.image-upload-zone:hover {
+    border-color: var(--bs-primary);
+    background-color: #fff;
+    cursor: pointer;
+}
+.image-upload-zone:hover i {
+    transform: scale(1.1);
+}
+.image-upload-zone i {
+    transition: transform 0.2s ease;
+}
+
+.image-preview-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+.image-preview-wrapper:hover .preview-overlay {
+    opacity: 1;
+}
+.preview-overlay {
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    backdrop-filter: blur(2px);
+}
+
+.custom-phase-select {
+    ::ng-deep .ng-select-container {
+        border: none !important;
+        background: transparent !important;
+        padding-left: 0;
+        min-height: auto;
+        box-shadow: none !important;
+    }
+    ::ng-deep .ng-value-container {
+        padding-left: 0 !important;
+    }
+    ::ng-deep .ng-arrow-wrapper {
+        padding-right: 0;
+    }
+    ::ng-deep .ng-input > input {
+        color: inherit;
+        font-weight: bold;
+    }
+}

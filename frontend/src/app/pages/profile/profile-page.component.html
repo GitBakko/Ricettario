@@ -1,0 +1,301 @@
+<div class="container py-4 py-lg-5">
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="d-flex justify-content-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Caricamento...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Error Alert -->
+  @if (error()) {
+    <div class="alert alert-danger shadow-sm border-0 d-flex align-items-center mb-4">
+      <i class="fa-solid fa-circle-exclamation fs-4 me-3"></i>
+      <div>
+        <strong>Errore</strong>
+        <p class="mb-0 small">{{ error() }}</p>
+      </div>
+      <button type="button" class="btn-close ms-auto" (click)="error.set(null)"></button>
+    </div>
+  }
+
+  <!-- Success Alert -->
+  @if (successMessage()) {
+    <div class="alert alert-success shadow-sm border-0 d-flex align-items-center mb-4 profile-alert-success">
+      <i class="fa-solid fa-check-circle fs-4 me-3"></i>
+      <span>{{ successMessage() }}</span>
+      <button type="button" class="btn-close ms-auto" (click)="successMessage.set(null)"></button>
+    </div>
+  }
+
+  <!-- Profile Content -->
+  @if (!isLoading() && profile(); as p) {
+    <div class="row g-4">
+      
+      <!-- Profile Header Card -->
+      <div class="col-12">
+        <div class="profile-header-card">
+          <!-- Background Banner -->
+          <div class="profile-header-bg" [class.has-banner]="bannerUrl()">
+            @if (bannerUrl()) {
+              <img [src]="bannerUrl()" alt="Banner" class="profile-banner-img">
+            } @else {
+              <div class="profile-header-pattern"></div>
+            }
+            
+            <!-- Banner Edit Button -->
+            <button class="profile-banner-edit" 
+                    (click)="triggerBannerUpload()"
+                    [disabled]="isUploadingBanner()"
+                    title="Cambia banner">
+              @if (isUploadingBanner()) {
+                <i class="fa-solid fa-spinner fa-spin"></i>
+              } @else {
+                <i class="fa-solid fa-image me-2"></i>
+                <span>Cambia banner</span>
+              }
+            </button>
+            <input #bannerInput 
+                   type="file" 
+                   accept="image/*" 
+                   class="d-none" 
+                   (change)="onBannerSelected($event)">
+          </div>
+          
+          <div class="profile-header-content">
+            <!-- Avatar Section -->
+            <div class="profile-avatar-section">
+              <div class="profile-avatar-wrapper">
+                @if (avatarUrl()) {
+                  <img [src]="avatarUrl()" [alt]="p.displayName || p.email" class="profile-avatar-img">
+                } @else {
+                  <div class="profile-avatar-placeholder">
+                    {{ initials() }}
+                  </div>
+                }
+                
+                <!-- Avatar Edit Overlay -->
+                <button class="profile-avatar-edit" 
+                        (click)="triggerAvatarUpload()"
+                        [disabled]="isUploadingAvatar()"
+                        title="Cambia avatar">
+                  @if (isUploadingAvatar()) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                  } @else {
+                    <i class="fa-solid fa-camera"></i>
+                  }
+                </button>
+                <input #fileInput 
+                       type="file" 
+                       accept="image/*" 
+                       class="d-none" 
+                       (change)="onAvatarSelected($event)">
+              </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="profile-info">
+              <h1 class="profile-name">{{ p.displayName || p.email.split('@')[0] }}</h1>
+              <p class="profile-email">
+                <i class="fa-solid fa-envelope me-2"></i>{{ p.email }}
+              </p>
+              
+              @if (p.location) {
+                <p class="profile-location">
+                  <i class="fa-solid fa-location-dot me-2"></i>{{ p.location }}
+                </p>
+              }
+              
+              @if (p.website) {
+                <p class="profile-website">
+                  <i class="fa-solid fa-globe me-2"></i>
+                  <a [href]="p.website" target="_blank" rel="noopener noreferrer">{{ p.website }}</a>
+                </p>
+              }
+            </div>
+
+            <!-- Stats Section -->
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <div class="profile-stat-icon">
+                  <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div class="profile-stat-info">
+                  <span class="profile-stat-value">{{ p.recipeCount }}</span>
+                  <span class="profile-stat-label">Ricette</span>
+                </div>
+              </div>
+              
+              <div class="profile-stat">
+                <div class="profile-stat-icon">
+                  <i class="fa-solid fa-calendar"></i>
+                </div>
+                <div class="profile-stat-info">
+                  <span class="profile-stat-value">{{ memberSince() }}</span>
+                  <span class="profile-stat-label">Membro dal</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Button -->
+            @if (!isEditing()) {
+              <button class="btn btn-danger profile-edit-btn" (click)="startEditing()">
+                <i class="fa-solid fa-pencil me-2"></i>Modifica Profilo
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Bio Section (View Mode) -->
+      @if (!isEditing() && p.bio) {
+        <div class="col-12">
+          <div class="profile-card">
+            <div class="profile-card-header">
+              <i class="fa-solid fa-user-pen me-2"></i>Bio
+            </div>
+            <div class="profile-card-body">
+              <p class="profile-bio">{{ p.bio }}</p>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Edit Form -->
+      @if (isEditing()) {
+        <div class="col-12">
+          <div class="profile-card profile-edit-card">
+            <div class="profile-card-header">
+              <i class="fa-solid fa-pencil me-2"></i>Modifica Profilo
+            </div>
+            <div class="profile-card-body">
+              <form (ngSubmit)="saveProfile()">
+                <div class="row g-4">
+                  <!-- Display Name -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa-solid fa-user me-2 text-primary"></i>Nome visualizzato
+                    </label>
+                    <input type="text" 
+                           class="form-control bg-light border-0 rounded-3"
+                           [value]="editForm().displayName"
+                           (input)="updateFormField('displayName', $any($event.target).value)"
+                           placeholder="Come vuoi essere chiamato?">
+                  </div>
+
+                  <!-- Location -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fa-solid fa-location-dot me-2 text-primary"></i>Località
+                    </label>
+                    <input type="text" 
+                           class="form-control bg-light border-0 rounded-3"
+                           [value]="editForm().location"
+                           (input)="updateFormField('location', $any($event.target).value)"
+                           placeholder="Es: Roma, Italia">
+                  </div>
+
+                  <!-- Website -->
+                  <div class="col-12">
+                    <label class="form-label">
+                      <i class="fa-solid fa-globe me-2 text-primary"></i>Sito Web
+                    </label>
+                    <input type="url" 
+                           class="form-control bg-light border-0 rounded-3"
+                           [value]="editForm().website"
+                           (input)="updateFormField('website', $any($event.target).value)"
+                           placeholder="https://tuosito.com">
+                  </div>
+
+                  <!-- Bio -->
+                  <div class="col-12">
+                    <label class="form-label">
+                      <i class="fa-solid fa-user-pen me-2 text-primary"></i>Bio
+                    </label>
+                    <textarea class="form-control bg-light border-0 rounded-3"
+                              rows="4"
+                              [value]="editForm().bio"
+                              (input)="updateFormField('bio', $any($event.target).value)"
+                              placeholder="Racconta qualcosa di te... La tua passione per la panificazione, le tue ricette preferite..."></textarea>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="col-12 d-flex gap-3 justify-content-end mt-4">
+                    <button type="button" 
+                            class="btn btn-outline-secondary rounded-pill px-4"
+                            (click)="cancelEditing()"
+                            [disabled]="isSaving()">
+                      <i class="fa-solid fa-xmark me-2"></i>Annulla
+                    </button>
+                    <button type="submit" 
+                            class="btn btn-danger rounded-pill px-4"
+                            [disabled]="isSaving()">
+                      @if (isSaving()) {
+                        <i class="fa-solid fa-spinner fa-spin me-2"></i>Salvataggio...
+                      } @else {
+                        <i class="fa-solid fa-check me-2"></i>Salva Modifiche
+                      }
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Quick Actions -->
+      <div class="col-12">
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <i class="fa-solid fa-bolt me-2"></i>Azioni Rapide
+          </div>
+          <div class="profile-card-body">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <a routerLink="/" class="profile-action-card">
+                  <div class="profile-action-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                  </div>
+                  <div class="profile-action-info">
+                    <span class="profile-action-title">Le Mie Ricette</span>
+                    <span class="profile-action-desc">Visualizza le tue ricette</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right profile-action-arrow"></i>
+                </a>
+              </div>
+              
+              <div class="col-md-4">
+                <a routerLink="/editor" class="profile-action-card">
+                  <div class="profile-action-icon profile-action-icon-accent">
+                    <i class="fa-solid fa-plus"></i>
+                  </div>
+                  <div class="profile-action-info">
+                    <span class="profile-action-title">Nuova Ricetta</span>
+                    <span class="profile-action-desc">Crea una nuova ricetta</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right profile-action-arrow"></i>
+                </a>
+              </div>
+              
+              <div class="col-md-4">
+                <a routerLink="/community" class="profile-action-card">
+                  <div class="profile-action-icon profile-action-icon-success">
+                    <i class="fa-solid fa-users"></i>
+                  </div>
+                  <div class="profile-action-info">
+                    <span class="profile-action-title">Community</span>
+                    <span class="profile-action-desc">Scopri altri baker</span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right profile-action-arrow"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  }
+</div>

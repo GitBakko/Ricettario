@@ -1,0 +1,89 @@
+// =============================================================================
+// KneadHub Featured Baker - Separate Panel with Beige Background
+// =============================================================================
+
+.kh-featured-section {
+  background: rgba(244, 228, 208, 0.5);
+  border-radius: var(--kh-radius-lg);
+  padding: var(--kh-spacing-lg);
+  margin-bottom: var(--kh-spacing-md);
+}
+
+.kh-section-title {
+  font-family: var(--kh-font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--kh-text-primary);
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--kh-spacing-md);
+  padding-bottom: var(--kh-spacing-xs);
+  border-bottom: 2px solid rgba(210, 105, 30, 0.2);
+}
+
+.kh-baker-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kh-spacing-sm);
+}
+
+.kh-baker-card {
+  display: flex;
+  align-items: center;
+  gap: var(--kh-spacing-sm);
+}
+
+.kh-baker-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--kh-radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.kh-baker-info {
+  flex: 1;
+}
+
+.kh-baker-name {
+  font-family: var(--kh-font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--kh-text-primary);
+  margin: 0 0 2px;
+}
+
+.kh-baker-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  .fa-star {
+    font-size: 0.625rem;
+    color: #D4D4D4;
+
+    &.filled {
+      color: var(--kh-highlight);
+    }
+  }
+}
+
+.kh-connect-btn {
+  width: 100%;
+  margin-top: var(--kh-spacing-md);
+  padding: 10px var(--kh-spacing-lg);
+  background: var(--kh-accent);
+  color: white;
+  font-family: var(--kh-font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--kh-radius-md);
+  cursor: pointer;
+  transition: all var(--kh-transition-fast);
+
+  &:hover {
+    background: var(--kh-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--kh-shadow-sm);
+  }
+}

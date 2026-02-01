@@ -1,0 +1,36 @@
+<!-- Kitchen Background (blurred) -->
+<div class="kh-kitchen-bg" *ngIf="authService.isAuthenticated()"></div>
+
+<!-- Main App Layout -->
+@if (authService.isAuthenticated()) {
+  <div class="kh-layout">
+    <!-- Sidebar (includes logo, search, navigation) -->
+    <app-sidebar 
+      class="kh-sidebar"
+      [isOpen]="sidebarOpen()"
+      (close)="closeSidebar()">
+    </app-sidebar>
+
+    <!-- Main Content -->
+    <main class="kh-main">
+      <app-navbar 
+        class="kh-header-bar"
+        (toggleSidebar)="toggleSidebar()">
+      </app-navbar>
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Right Sidebar (Desktop only) -->
+    <aside class="kh-aside">
+      <app-featured-baker></app-featured-baker>
+      <app-trending-now></app-trending-now>
+    </aside>
+
+    <!-- Bottom Navigation (Mobile only) -->
+    <app-bottom-nav class="kh-bottom-nav"></app-bottom-nav>
+  </div>
+} @else {
+  <!-- Non-authenticated layout (login/register) -->
+  <router-outlet></router-outlet>
+}
+

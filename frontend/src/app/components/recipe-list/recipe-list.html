@@ -1,0 +1,205 @@
+<!-- Action Bar (Create + View Toggle) -->
+<div class="recipe-list-header">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="section-title mb-1">{{ 'RECIPE_LIST.TITLE' | translate }}</h2>
+      <p class="section-subtitle mb-0">{{ 'RECIPE_LIST.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="d-flex gap-2 align-items-center">
+      <!-- View Toggle Buttons -->
+      <div class="view-toggle-group">
+        <button 
+          class="view-toggle-btn" 
+          [class.active]="viewMode() === 'card'"
+          (click)="setViewMode('card')"
+          title="Visualizzazione a Card">
+          <i class="fa-solid fa-grip"></i>
+        </button>
+        <button 
+          class="view-toggle-btn" 
+          [class.active]="viewMode() === 'list'"
+          (click)="setViewMode('list')"
+          title="Visualizzazione a Lista">
+          <i class="fa-solid fa-list"></i>
+        </button>
+      </div>
+      <a routerLink="/create" class="btn btn-accent rounded-pill px-4">
+        <i class="fa-solid fa-plus me-2"></i>{{ 'RECIPE_LIST.NEW_RECIPE' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Category Filter Pills -->
+  <div class="category-filter-bar">
+    <div class="filter-pills-scroll">
+      <button 
+        class="filter-pill" 
+        [ngClass]="{'active': selectedCategoryId() === null}"
+        (click)="onCategoryChange(null)">
+        <i class="fa-solid fa-utensils me-1"></i>{{ 'RECIPE_LIST.ALL_CATEGORIES' | translate }}
+      </button>
+      @for (cat of categories(); track cat.id) {
+        <button 
+          class="filter-pill"
+          [ngClass]="{'active': selectedCategoryId() === cat.id}"
+          (click)="onCategoryChange(cat.id)">
+          {{ cat.name }}
+        </button>
+      }
+    </div>
+    @if (selectedCategoryId() || searchQuery()) {
+      <button class="btn-clear-filters" (click)="clearFilters()">
+        <i class="fa-solid fa-xmark me-1"></i>{{ 'RECIPE_LIST.RESET_FILTERS' | translate }}
+      </button>
+    }
+  </div>
+</div>
+
+<!-- Recipes Grid/List -->
+<div class="recipes-container" [ngClass]="{'recipes-grid': viewMode() === 'card', 'recipes-list': viewMode() === 'list'}">
+  @for (recipe of recipes(); track recipe.id) {
+    @if (viewMode() === 'card') {
+      <!-- Card View -->
+      <article class="recipe-card" [routerLink]="['/recipes', recipe.id]">
+        <!-- Card Image -->
+        <div class="recipe-card__image-wrapper">
+          @if (recipe.imageUrl) {
+            <img 
+              [src]="recipe.imageUrl" 
+              [alt]="recipe.title"
+              class="recipe-card__image"
+              loading="lazy">
+          } @else {
+            <div class="recipe-card__placeholder">
+              <img src="assets/images/favicon.png" alt="" class="recipe-card__placeholder-icon">
+            </div>
+          }
+          
+          <!-- Time badges - bottom left -->
+          <div class="recipe-card__time-badges">
+            @if (recipe.prepTimeMinutes) {
+              <span class="recipe-card__badge recipe-card__badge--prep">
+                <i class="fa-solid fa-hand"></i>
+                {{ recipe.prepTimeMinutes | timeFormat }}
+              </span>
+            }
+            @if (recipe.prepTimeMinutes && recipe.cookTimeMinutes) {
+              <span class="recipe-card__badge recipe-card__badge--total">
+                <i class="fa-regular fa-clock"></i>
+                {{ ((recipe.prepTimeMinutes || 0) + (recipe.cookTimeMinutes || 0)) | timeFormat }}
+              </span>
+            }
+            @if (recipe.difficulty) {
+              <span class="recipe-card__badge recipe-card__badge--difficulty" [attr.data-level]="recipe.difficulty">
+                <i class="fa-solid fa-signal"></i>
+                {{ 'DIFFICULTY.' + recipe.difficulty.toUpperCase() | translate }}
+              </span>
+            }
+          </div>
+          
+          <!-- Image navigation - bottom right (placeholder for multiple images) -->
+          <button class="recipe-card__nav" (click)="$event.stopPropagation()">
+            <i class="fa-solid fa-images"></i>
+          </button>
+        </div>
+        
+        <!-- Card Content - Below image -->
+        <div class="recipe-card__content">
+          <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+          <div class="recipe-card__info">
+            @if (recipe.category) {
+              <span class="recipe-card__category">
+                <i class="fa-solid fa-folder"></i>
+                {{ recipe.category.name }}
+              </span>
+            }
+          </div>
+          
+          <!-- Like Heart -->
+          @if (recipe.id) {
+            <button 
+              class="recipe-card__like" 
+              [class.liked]="isLiked(recipe.id)"
+              (click)="onLikeClick($event, recipe.id)">
+              <i [class]="isLiked(recipe.id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+            </button>
+          }
+        </div>
+      </article>
+    } @else {
+      <!-- List View -->
+      <article class="recipe-list-item" [routerLink]="['/recipes', recipe.id]">
+        <!-- Thumbnail -->
+        <div class="recipe-list-item__image">
+          @if (recipe.imageUrl) {
+            <img [src]="recipe.imageUrl" [alt]="recipe.title" loading="lazy">
+          } @else {
+            <div class="recipe-list-item__placeholder">
+              <img src="assets/images/favicon.png" alt="">
+            </div>
+          }
+        </div>
+        
+        <!-- Content -->
+        <div class="recipe-list-item__content">
+          <h3 class="recipe-list-item__title">{{ recipe.title }}</h3>
+          @if (recipe.description) {
+            <p class="recipe-list-item__description">{{ recipe.description }}</p>
+          }
+          <div class="recipe-list-item__meta">
+            @if (recipe.category) {
+              <span class="recipe-list-item__category">
+                <i class="fa-solid fa-folder"></i>
+                {{ recipe.category.name }}
+              </span>
+            }
+            @if (recipe.prepTimeMinutes) {
+              <span class="recipe-list-item__time">
+                <i class="fa-solid fa-hand"></i>
+                {{ recipe.prepTimeMinutes | timeFormat }}
+              </span>
+            }
+            @if (recipe.cookTimeMinutes) {
+              <span class="recipe-list-item__time">
+                <i class="fa-regular fa-clock"></i>
+                {{ recipe.cookTimeMinutes | timeFormat }}
+              </span>
+            }
+            @if (recipe.difficulty) {
+              <span class="recipe-list-item__difficulty" [attr.data-level]="recipe.difficulty">
+                <i class="fa-solid fa-signal"></i>
+                {{ 'DIFFICULTY.' + recipe.difficulty.toUpperCase() | translate }}
+              </span>
+            }
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="recipe-list-item__actions">
+          @if (recipe.id) {
+            <button 
+              class="recipe-list-item__like" 
+              [class.liked]="isLiked(recipe.id)"
+              (click)="onLikeClick($event, recipe.id)">
+              <i [class]="isLiked(recipe.id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+            </button>
+          }
+          <button class="recipe-list-item__arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </article>
+    }
+  } @empty {
+    <div class="recipes-empty">
+      <div class="recipes-empty__icon">
+        <i class="fa-solid fa-bread-slice"></i>
+      </div>
+      <h4>{{ 'RECIPE_LIST.EMPTY_TITLE' | translate }}</h4>
+      <p>{{ 'RECIPE_LIST.EMPTY_MESSAGE' | translate }}</p>
+      <a routerLink="/create" class="btn btn-accent rounded-pill px-4">
+        <i class="fa-solid fa-plus me-2"></i>{{ 'RECIPE_LIST.CREATE_RECIPE' | translate }}
+      </a>
+    </div>
+  }
+</div>

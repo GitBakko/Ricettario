@@ -1,0 +1,719 @@
+// =============================================================================
+// Recipe List Component Styles - KneadHub Theme (Mockup Design)
+// =============================================================================
+
+// Header Section
+.recipe-list-header {
+  margin-bottom: var(--kh-spacing-xl);
+}
+
+.section-title {
+  font-family: var(--kh-font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--kh-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  position: relative;
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background: var(--kh-accent);
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+}
+
+.section-subtitle {
+  font-family: var(--kh-font-body);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--kh-text-secondary);
+  line-height: 1.5;
+  margin-top: var(--kh-spacing-xs);
+}
+
+// Icon Circle Button
+.btn-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--kh-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: var(--kh-text-secondary);
+  cursor: pointer;
+  transition: all var(--kh-transition-fast);
+  
+  &:hover {
+    background: var(--kh-primary);
+    color: white;
+    border-color: var(--kh-primary);
+  }
+}
+
+// Category Filter Bar
+.category-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--kh-spacing-sm);
+  margin-top: var(--kh-spacing-md);
+}
+
+.filter-pills-scroll {
+  display: flex;
+  gap: var(--kh-spacing-xs);
+  overflow-x: auto;
+  padding-bottom: var(--kh-spacing-xs);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--kh-spacing-xs) var(--kh-spacing-md);
+  border-radius: var(--kh-radius-full);
+  background: var(--kh-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: var(--kh-text-secondary);
+  font-family: var(--kh-font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all var(--kh-transition-fast);
+  
+  &:hover {
+    background: rgba(244, 162, 97, 0.1);
+    border-color: var(--kh-accent);
+    color: var(--kh-accent);
+  }
+  
+  &.active {
+    background: var(--kh-accent);
+    border-color: var(--kh-accent);
+    color: white;
+  }
+}
+
+.btn-clear-filters {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: var(--kh-text-muted);
+  font-family: var(--kh-font-body);
+  font-size: 0.75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  
+  &:hover {
+    color: var(--kh-error);
+  }
+}
+
+// =============================================================================
+// View Toggle Buttons
+// =============================================================================
+.view-toggle-group {
+  display: flex;
+  background: var(--kh-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--kh-radius-md);
+  overflow: hidden;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: var(--kh-text-secondary);
+  cursor: pointer;
+  transition: all var(--kh-transition-fast);
+  
+  &:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--kh-text-primary);
+  }
+  
+  &.active {
+    background: var(--kh-primary);
+    color: white;
+  }
+  
+  &:first-child {
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+  }
+}
+
+// =============================================================================
+// Recipes Container
+// =============================================================================
+.recipes-container {
+  // Common styles for empty state
+}
+
+// =============================================================================
+// Recipes Grid - Card View
+// =============================================================================
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--kh-spacing-lg);
+  
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// =============================================================================
+// Recipes List - List View
+// =============================================================================
+.recipes-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kh-spacing-md);
+}
+
+.recipe-list-item {
+  display: flex;
+  align-items: stretch;
+  gap: var(--kh-spacing-md);
+  background: var(--kh-surface);
+  border-radius: var(--kh-radius-lg);
+  box-shadow: var(--kh-shadow-sm);
+  cursor: pointer;
+  transition: all var(--kh-transition-fast);
+  overflow: hidden;
+  
+  &:hover {
+    box-shadow: var(--kh-shadow-md);
+    transform: translateX(4px);
+  }
+  
+  &__image {
+    flex-shrink: 0;
+    width: 120px;
+    min-height: 100px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    @media (max-width: 576px) {
+      width: 100px;
+    }
+  }
+  
+  &__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f0e8 0%, #e8dfd3 100%);
+    
+    img {
+      width: 40px;
+      height: 40px;
+      opacity: 0.4;
+    }
+  }
+  
+  &__content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--kh-spacing-xs);
+    padding: var(--kh-spacing-md) 0;
+  }
+  
+  &__title {
+    font-family: var(--kh-font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--kh-text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  &__description {
+    font-size: 0.875rem;
+    color: var(--kh-text-secondary);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+  
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--kh-spacing-sm);
+    align-items: center;
+  }
+  
+  &__category,
+  &__time,
+  &__difficulty {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--kh-text-muted);
+    
+    i {
+      font-size: 0.7rem;
+    }
+  }
+  
+  &__category {
+    color: var(--kh-accent);
+  }
+  
+  &__difficulty {
+    &[data-level="Easy"] {
+      color: #22c55e;
+    }
+    &[data-level="Medium"] {
+      color: #f59e0b;
+    }
+    &[data-level="Hard"] {
+      color: #ef4444;
+    }
+    &[data-level="Professional"] {
+      color: var(--kh-text-primary);
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--kh-spacing-sm);
+    flex-shrink: 0;
+    padding-right: var(--kh-spacing-md);
+  }
+  
+  &__like {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    color: var(--kh-text-muted);
+    cursor: pointer;
+    transition: all var(--kh-transition-fast);
+    
+    &:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    &.liked {
+      color: #ef4444;
+    }
+  }
+  
+  &__arrow {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    color: var(--kh-text-muted);
+    cursor: pointer;
+    transition: all var(--kh-transition-fast);
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--kh-text-primary);
+    }
+  }
+}
+
+// =============================================================================
+// Recipe Card - EXACT Mockup Design
+// =============================================================================
+.recipe-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform var(--kh-transition-base);
+  
+  &:hover {
+    transform: translateY(-2px);
+    
+    .recipe-card__image {
+      transform: scale(1.02);
+    }
+  }
+  
+  // Image Wrapper
+  &__image-wrapper {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--kh-radius-md) var(--kh-radius-md) 0 0;
+    overflow: hidden;
+    background: #f5f0eb;
+  }
+  
+  // Image
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--kh-transition-slow);
+  }
+  
+  // Placeholder
+  &__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F7EDE7;
+  }
+  
+  &__placeholder-icon {
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
+  
+  // Time badges - bottom left
+  &__time-badges {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+  }
+  
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 4px;
+    font-family: var(--kh-font-body);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: #443d35;
+    backdrop-filter: blur(4px);
+    
+    i {
+      font-size: 0.625rem;
+      opacity: 0.7;
+    }
+    
+    &--prep {
+      i { color: var(--kh-primary); }
+    }
+    
+    &--total {
+      i { color: var(--kh-accent); }
+    }
+    
+    &--difficulty {
+      &[data-level="Easy"] {
+        background: rgba(25, 135, 84, 0.9);
+        color: white;
+        i { color: white; opacity: 1; }
+      }
+      &[data-level="Medium"] {
+        background: rgba(255, 193, 7, 0.95);
+        color: #000;
+        i { color: #000; opacity: 1; }
+      }
+      &[data-level="Hard"] {
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
+        i { color: white; opacity: 1; }
+      }
+      &[data-level="Professional"] {
+        background: rgba(33, 37, 41, 0.9);
+        color: white;
+        i { color: white; opacity: 1; }
+      }
+    }
+  }
+  
+  // Image navigation button - bottom right
+  &__nav {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 50%;
+    color: #443d35;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--kh-transition-fast);
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    
+    &:hover {
+      background: white;
+      color: var(--kh-primary);
+      transform: scale(1.1);
+    }
+  }
+  
+  // Content - Below image
+  &__content {
+    position: relative;
+    padding: var(--kh-spacing-md);
+    background: #EEE7DD;
+    border-radius: 0 0 var(--kh-radius-md) var(--kh-radius-md);
+  }
+  
+  // Title
+  &__title {
+    font-family: var(--kh-font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #000000;
+    margin: 0 0 8px;
+    line-height: 32px; // Match heart height for alignment
+    padding-right: 44px; // Space for heart
+  }
+  
+  // Info row with category and difficulty
+  &__info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: var(--kh-font-body);
+    font-size: 0.75rem;
+  }
+  
+  &__category {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #6b5d4d;
+    
+    i {
+      font-size: 0.625rem;
+      opacity: 0.7;
+    }
+  }
+  
+  // Like Heart - in round container
+  &__like {
+    position: absolute;
+    top: var(--kh-spacing-md);
+    right: var(--kh-spacing-md);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FDFCFA;
+    border: none;
+    border-radius: 50%;
+    color: var(--kh-text-muted);
+    cursor: pointer;
+    transition: all var(--kh-transition-fast);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    
+    i {
+      font-size: 0.875rem;
+    }
+    
+    &:hover {
+      color: var(--kh-error);
+      transform: scale(1.1);
+    }
+    
+    &.liked {
+      color: var(--kh-error);
+      
+      i {
+        animation: heartPulse 0.3s ease-out;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// Empty State
+// =============================================================================
+.recipes-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--kh-spacing-2xl) var(--kh-spacing-lg);
+  text-align: center;
+  
+  &__icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFF5E6, #F4E4D0);
+    margin-bottom: var(--kh-spacing-md);
+    
+    i {
+      font-size: 2rem;
+      color: var(--kh-primary);
+    }
+  }
+  
+  h4 {
+    font-family: var(--kh-font-display);
+    color: var(--kh-text-primary);
+    margin-bottom: var(--kh-spacing-xs);
+  }
+  
+  p {
+    color: var(--kh-text-muted);
+    margin-bottom: var(--kh-spacing-md);
+  }
+}
+
+// =============================================================================
+// Heart Pulse Animation
+// =============================================================================
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// =============================================================================
+// Responsive Adjustments
+// =============================================================================
+@media (max-width: 767.98px) {
+  // Full width container on mobile
+  :host ::ng-deep .container.py-5 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+  .recipe-list-header {
+    margin-bottom: var(--kh-spacing-md);
+    
+    .d-flex {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: var(--kh-spacing-md);
+    }
+    
+    .d-flex > div:last-child {
+      width: 100%;
+      
+      .btn-accent {
+        flex: 1;
+      }
+    }
+  }
+  
+  // Category pills full width on mobile
+  .category-filter-bar {
+    margin-top: var(--kh-spacing-sm);
+    
+    .filter-pills-scroll {
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  
+  .recipes-grid {
+    grid-template-columns: 1fr;
+    gap: var(--kh-spacing-md);
+  }
+  
+  .recipe-card {
+    border-radius: 12px;
+    
+    &__title {
+      font-size: 0.875rem;
+    }
+  }
+  
+  // List view mobile optimization
+  .list-view-item {
+    border-radius: 12px !important;
+    padding: 0.5rem !important;
+    gap: 0.75rem !important;
+    
+    &__image {
+      width: 100px !important;
+      min-width: 100px !important;
+      height: 80px !important;
+    }
+    
+    &__title {
+      font-size: 0.9rem !important;
+    }
+    
+    &__meta {
+      font-size: 0.75rem !important;
+      gap: 0.5rem !important;
+    }
+    
+    &__tags {
+      display: none !important; // Hide tags on mobile to save space
+    }
+    
+    &__description {
+      font-size: 0.8rem !important;
+      -webkit-line-clamp: 2 !important;
+    }
+  }
+}

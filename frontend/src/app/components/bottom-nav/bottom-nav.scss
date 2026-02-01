@@ -1,0 +1,61 @@
+// =============================================================================
+// KneadHub Bottom Navigation Styles
+// =============================================================================
+
+.kh-bottom-nav-container {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--kh-bottom-nav-height);
+    background: var(--kh-surface);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: var(--kh-z-fixed);
+    animation: kh-slide-in-bottom var(--kh-transition-base) ease-out;
+  }
+}
+
+.kh-bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: var(--kh-spacing-xs);
+  color: var(--kh-text-muted);
+  text-decoration: none;
+  transition: all var(--kh-transition-fast);
+
+  i {
+    font-size: var(--kh-font-size-xl);
+    transition: transform var(--kh-transition-fast);
+  }
+
+  &:hover {
+    color: var(--kh-accent);
+  }
+
+  &.active {
+    color: var(--kh-accent);
+
+    i {
+      transform: scale(1.1);
+    }
+
+    .kh-bottom-nav-label {
+      font-weight: var(--kh-font-weight-semibold);
+    }
+  }
+}
+
+.kh-bottom-nav-label {
+  font-size: 10px;
+  font-weight: var(--kh-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}

@@ -1,0 +1,18 @@
+.btn-hover-custom {
+    transition: all 0.2s ease-in-out;
+    
+    // Default state overrides if needed, but we keep existing classes for base state
+    
+    &:hover {
+        // Use the CSS variable for background
+        background-color: var(--hover-color) !important;
+        border-color: var(--hover-color) !important;
+        
+        // Force text and icons to white for better contrast primarily
+        color: #fff !important;
+        
+        i {
+            color: #fff !important;
+        }
+    }
+}

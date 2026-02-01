@@ -1,0 +1,14 @@
+.category-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.list-group-item {
+    transition: background-color 0.15s ease-in-out;
+    
+    &:hover {
+        background-color: rgba(0,0,0,0.02);
+    }
+}

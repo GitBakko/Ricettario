@@ -1,0 +1,53 @@
+<div class="d-flex align-items-center justify-content-center min-vh-100" style="background: linear-gradient(135deg, #fdf8f3 0%, #f5e6d3 100%);">
+      <div class="card border-0 shadow-lg p-4 p-md-5" style="max-width: 450px; width: 100%; border-radius: 1.5rem;">
+        
+        <!-- Header -->
+        <div class="text-center mb-5">
+          <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 shadow" style="width: 80px; height: 80px; background: linear-gradient(135deg, #6b4423 0%, #a0522d 100%);">
+            <i class="fa-solid fa-user-plus text-white fs-1"></i>
+          </div>
+          <h2 class="fw-bold mb-1" style="color: #6b4423;">Unisciti a <span class="fw-light">KneadHub</span></h2>
+          <p class="text-muted small">Crea il tuo laboratorio di panificazione personale</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <!-- Email -->
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-uppercase text-muted" style="letter-spacing: 0.5px;">Email</label>
+            <div class="input-group input-group-lg">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
+              <input type="email" class="form-control border-start-0 ps-0 bg-white" formControlName="email" placeholder="name@example.com">
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-uppercase text-muted" style="letter-spacing: 0.5px;">Password</label>
+            <div class="input-group input-group-lg">
+              <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
+              <input type="password" class="form-control border-start-0 ps-0 bg-white" formControlName="password" placeholder="••••••••">
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn w-100 btn-lg mb-4 rounded-pill fw-semibold shadow text-white" style="background: linear-gradient(135deg, #6b4423 0%, #a0522d 100%);" [disabled]="registerForm.invalid || isLoading()">
+            @if (isLoading()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            {{ isLoading() ? 'Creazione...' : 'Crea Account' }}
+          </button>
+
+          <!-- Error -->
+          @if (errorMessage()) {
+            <div class="alert alert-danger d-flex align-items-center small py-2 mb-3 border-0 shadow-sm">
+              <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ errorMessage() }}
+            </div>
+          }
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-2">
+          <p class="text-muted mb-0">Hai già un account? <a routerLink="/login" class="fw-bold text-decoration-none" style="color: #6b4423;">Accedi qui</a></p>
+        </div>
+      </div>
+    </div>

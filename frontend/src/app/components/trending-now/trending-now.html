@@ -1,0 +1,28 @@
+<div class="kh-trending-section">
+  <h3 class="kh-section-title">
+    <i class="fas fa-fire"></i>
+    {{ 'TRENDING.TITLE' | translate }}
+  </h3>
+
+  <!-- @MOCK: Recipe cards from MOCK_TRENDING_RECIPES -->
+  <div class="kh-trending-list">
+    @for (recipe of trendingRecipes; track recipe.id) {
+      <div class="kh-trending-card" (click)="onRecipeClick(recipe)">
+        <img [src]="recipe.thumbnail" [alt]="recipe.title" class="kh-trending-thumb">
+        
+        <div class="kh-trending-info">
+          <h4 class="kh-trending-title">{{ recipe.title }}</h4>
+          <p class="kh-trending-author">
+            <i class="fas fa-user"></i>
+            {{ recipe.author }}
+          </p>
+        </div>
+
+        <div class="kh-trending-likes">
+          <i class="fas fa-heart"></i>
+          <span>{{ recipe.likes }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

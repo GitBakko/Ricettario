@@ -1,0 +1,14 @@
+<!-- Bottom Navigation (Mobile only) -->
+<nav class="kh-bottom-nav-container">
+  <!-- @MOCK: Navigation items from MOCK_NAV_ITEMS -->
+  @for (item of navItems; track item.id) {
+    <a 
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: item.route === '/'}"
+      class="kh-bottom-nav-item">
+      <i class="fas" [ngClass]="item.icon"></i>
+      <span class="kh-bottom-nav-label">{{ item.labelKey | translate }}</span>
+    </a>
+  }
+</nav>

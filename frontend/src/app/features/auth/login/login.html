@@ -1,0 +1,66 @@
+<div class="kh-login-page">
+  <!-- Background image with blur -->
+  <div class="kh-login-background"></div>
+  
+  <!-- Login Card with Glassmorphism -->
+  <div class="kh-login-card">
+    <!-- Logo - Dynamic based on theme -->
+    <div class="kh-login-logo">
+      <img [src]="logoSrc()" alt="KneadHub" class="kh-login-logo-img">
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="kh-login-form">
+      <!-- Email Input -->
+      <div class="kh-input-group">
+        <input 
+          type="email" 
+          formControlName="email" 
+          class="kh-input"
+          [placeholder]="'LOGIN.EMAIL' | translate"
+          autocomplete="email">
+        <div class="kh-input-line"></div>
+      </div>
+
+      <!-- Password Input -->
+      <div class="kh-input-group">
+        <input 
+          type="password" 
+          formControlName="password" 
+          class="kh-input"
+          [placeholder]="'LOGIN.PASSWORD' | translate"
+          autocomplete="current-password">
+        <div class="kh-input-line"></div>
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+        <div class="kh-login-error">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Sign In Button -->
+      <button 
+        type="submit" 
+        class="kh-login-btn"
+        [disabled]="loginForm.invalid || isLoading()">
+        @if (isLoading()) {
+          <span class="kh-spinner"></span>
+        }
+        {{ isLoading() ? ('LOGIN.SIGNING_IN' | translate) : ('LOGIN.SIGN_IN' | translate) }}
+      </button>
+
+      <!-- Sign Up Link -->
+      <a routerLink="/register" class="kh-login-link kh-login-link-signup">
+        {{ 'LOGIN.SIGN_UP' | translate }}
+      </a>
+
+      <!-- Forgot Password Link -->
+      <a href="#" class="kh-login-link kh-login-link-forgot">
+        {{ 'LOGIN.FORGOT_PASSWORD' | translate }}
+      </a>
+    </form>
+  </div>
+</div>

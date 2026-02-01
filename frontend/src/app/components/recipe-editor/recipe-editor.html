@@ -1,0 +1,657 @@
+<div class="container-fluid py-4">
+      <!-- Header -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+          <div>
+              <h1 class="display-6 fw-bold mb-1" style="font-family: var(--kh-font-display); color: var(--kh-text-primary);">Laboratorio Ricetta</h1>
+              <p class="text-muted mb-0">{{ editMode() ? 'Modifica la tua ricetta' : 'Crea una nuova ricetta passo dopo passo' }}</p>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" (click)="cancel()">
+                <i class="fa-solid fa-xmark me-2"></i>Annulla
+            </button>
+            <div class="d-flex flex-column align-items-end">
+                <button type="button" class="btn btn-danger rounded-pill px-4" (click)="onSubmit()" [disabled]="recipeForm.invalid">
+                    <i class="fa-solid fa-floppy-disk me-2"></i>Salva
+                </button>
+                 @if (recipeForm.invalid && recipeForm.touched) {
+                    <small class="text-danger fw-bold small mt-1">
+                        <i class="fa-solid fa-circle-exclamation"></i> Dati mancanti
+                    </small>
+                 }
+            </div>
+          </div>
+      </div>
+
+      <form [formGroup]="recipeForm">
+        
+        <!-- NAVBAR TABS -->
+        <ul class="nav nav-tabs nav-fill mb-4 border-bottom-0" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link border-0 rounded-top py-3 fw-bold" [class.active]="activeTab() === 'general'" [class.bg-white]="activeTab() === 'general'" [class.text-primary]="activeTab() === 'general'" [class.text-secondary]="activeTab() !== 'general'" (click)="activeTab.set('general')">
+                    <i class="fa-solid fa-circle-info me-1"></i> 1. Info Base
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link border-0 rounded-top py-3 fw-bold" [class.active]="activeTab() === 'formula'" [class.bg-white]="activeTab() === 'formula'" [class.text-primary]="activeTab() === 'formula'" [class.text-secondary]="activeTab() !== 'general'" (click)="activeTab.set('formula')">
+                    <i class="fa-solid fa-calculator me-1"></i> 2. Formula
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link border-0 rounded-top py-3 fw-bold" [class.active]="activeTab() === 'phases'" [class.bg-white]="activeTab() === 'phases'" [class.text-primary]="activeTab() === 'phases'" [class.text-secondary]="activeTab() !== 'general'" (click)="activeTab.set('phases')">
+                    <i class="fa-solid fa-list-check me-1"></i> 3. Procedura
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link border-0 rounded-top py-3 fw-bold" [class.active]="activeTab() === 'media'" [class.bg-white]="activeTab() === 'media'" [class.text-primary]="activeTab() === 'media'" [class.text-secondary]="activeTab() !== 'general'" (click)="activeTab.set('media')">
+                    <i class="fa-brands fa-youtube me-1"></i> 4. Media
+                </button>
+            </li>
+        </ul>
+
+        <!-- TAB 1: GENERAL INFO -->
+        @if (activeTab() === 'general') {
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-solid fa-circle-info me-2" style="color: var(--kh-primary);"></i>Dettagli Generali
+                    </h5>
+                </div>
+                <div class="card-body px-4 pb-4 pt-0">
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-medium mb-2">Nome della Ricetta</label>
+                            <input type="text" class="form-control form-control-lg bg-light border-0 rounded-3" 
+                                   [class.is-invalid]="recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched"
+                                   formControlName="title" placeholder="Es. Pane Cafone con Biga...">
+                            <div class="invalid-feedback">Inserisci un nome per la ricetta.</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-medium mb-2">Descrizione</label>
+                            <textarea class="form-control bg-light border-0 rounded-3" formControlName="description" rows="3" placeholder="Una breve storia o descrizione..."></textarea>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-medium mb-2">Immagine di Copertina</label>
+                            
+                            <!-- Hidden Input -->
+                            <input type="file" #fileInput class="d-none" (change)="onFileSelected($event)" accept="image/*">
+                            <input type="hidden" formControlName="imageUrl">
+
+                            @if (!currentImage()) {
+                                <!-- Empty State -->
+                                <div class="image-upload-zone rounded-3 p-5 text-center d-flex flex-column align-items-center justify-content-center bg-light" (click)="fileInput.click()">
+                                    <div style="width: 80px" class="mb-3 p-3 rounded-circle" style="background: rgba(var(--kh-primary-rgb), 0.1); color: var(--kh-primary);">
+                                        <i class="fa-solid fa-cloud-arrow-up fs-2"></i>
+                                    </div>
+                                    <h6 class="fw-bold text-dark mb-1">Clicca per caricare l'immagine</h6>
+                                    <p class="text-muted small mb-0">Supporta JPG, PNG fino a 5MB</p>
+                                </div>
+                            } @else {
+                                <!-- Preview State -->
+                                <div class="image-preview-wrapper rounded-4 shadow-sm border" style="height: 300px;">
+                                    <img [src]="currentImage()" alt="Recipe Cover" class="w-100 h-100 object-fit-cover">
+                                    
+                                    <!-- Overlay Actions -->
+                                    <div class="preview-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center gap-3">
+                                        <button type="button" class="btn btn-light rounded-pill px-4 fw-bold shadow-sm" (click)="fileInput.click()">
+                                            <i class="fa-solid fa-arrows-rotate me-2"></i>Cambia
+                                        </button>
+                                        <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" (click)="removeImage()">
+                                            <i class="fa-solid fa-trash me-2"></i>Rimuovi
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small text-muted fw-medium mb-3">Livello di Difficoltà</label>
+                            <div class="row row-cols-2 row-cols-md-4 g-3">
+                                <div class="col">
+                                    <label class="cursor-pointer w-100 position-relative">
+                                        <input type="radio" formControlName="difficulty" value="Easy" class="btn-check">
+                                        <div class="card h-100 border-0 shadow-sm difficulty-card-selector text-center py-4">
+                                            <div class="icon-wrapper mb-2 rounded-circle mx-auto d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success">
+                                                <i class="fa-solid fa-egg fs-4"></i>
+                                            </div>
+                                            <span class="fw-bold small text-uppercase text-secondary tracking-wide">Facile</span>
+                                            <div class="check-indicator text-success position-absolute top-0 end-0 mt-2 me-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col">
+                                    <label class="cursor-pointer w-100 position-relative">
+                                        <input type="radio" formControlName="difficulty" value="Medium" class="btn-check">
+                                        <div class="card h-100 border-0 shadow-sm difficulty-card-selector text-center py-4">
+                                            <div class="icon-wrapper mb-2 rounded-circle mx-auto d-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning">
+                                            <i class="fa-solid fa-chart-line fs-4"></i>
+                                            </div>
+                                            <span class="fw-bold small text-uppercase text-secondary tracking-wide">Media</span>
+                                            <div class="check-indicator text-primary position-absolute top-0 end-0 mt-2 me-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col">
+                                    <label class="cursor-pointer w-100 position-relative">
+                                        <input type="radio" formControlName="difficulty" value="Hard" class="btn-check">
+                                        <div class="card h-100 border-0 shadow-sm difficulty-card-selector text-center py-4">
+                                            <div class="icon-wrapper mb-2 rounded-circle mx-auto d-flex align-items-center justify-content-center bg-danger bg-opacity-10 text-danger">
+                                                <i class="fa-solid fa-bolt fs-4"></i>
+                                            </div>
+                                            <span class="fw-bold small text-uppercase text-secondary tracking-wide">Difficile</span>
+                                            <div class="check-indicator text-danger position-absolute top-0 end-0 mt-2 me-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col">
+                                    <label class="cursor-pointer w-100 position-relative">
+                                        <input type="radio" formControlName="difficulty" value="Professional" class="btn-check">
+                                        <div class="card h-100 border-0 shadow-sm difficulty-card-selector text-center py-4">
+                                            <div class="icon-wrapper mb-2 rounded-circle mx-auto d-flex align-items-center justify-content-center bg-dark bg-opacity-10 text-dark">
+                                            <i class="fa-solid fa-graduation-cap fs-4"></i>
+                                            </div>
+                                            <span class="fw-bold small text-uppercase text-secondary tracking-wide">Pro</span>
+                                            <div class="check-indicator text-dark position-absolute top-0 end-0 mt-2 me-2">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Category Selection -->
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted fw-medium mb-2">Categoria</label>
+                            <select class="form-select bg-light border-0 rounded-3" formControlName="categoryId">
+                                <option [value]="null">Seleziona una categoria...</option>
+                                @for (cat of categoriesList(); track cat.id) {
+                                    <option [value]="cat.id">
+                                        {{ cat.name }}
+                                    </option>
+                                }
+                            </select>
+                            <div class="form-text">
+                                <a routerLink="/categories" class="text-decoration-none small">
+                                    <i class="fa-solid fa-gear me-1"></i>Gestisci categorie
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Tags Selection -->
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted fw-medium mb-2">Tags</label>
+                            <app-tag-input formControlName="tagIds" placeholder="Cerca o aggiungi tags..."></app-tag-input>
+                            <div class="form-text">
+                                <a routerLink="/tags" class="text-decoration-none small">
+                                    <i class="fa-solid fa-gear me-1"></i>Gestisci tags
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- TAB 2: FORMULA -->
+        @if (activeTab() === 'formula') {
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-solid fa-calculator me-2" style="color: var(--kh-primary);"></i>Formula & Ingredienti
+                    </h5>
+                    <div class="d-flex align-items-center gap-3 bg-light px-3 py-2 rounded-3">
+                        <label class="mb-0 fw-medium text-muted small">Totale Farina (g)</label>
+                        <input type="number" class="form-control form-control-sm fw-bold border-0 bg-white rounded-3" style="width: 100px" 
+                            [formControl]="totalFlourControl" (change)="recalculateIngredients()">
+                    </div>
+                </div>
+                <div class="card-body bg-white p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light text-secondary">
+                                <tr>
+                                    <th style="width: 5%" class="text-center py-3 text-uppercase small fw-bold">#</th>
+                                    <th style="width: 35%" class="py-3 text-uppercase small fw-bold">Ingrediente</th>
+                                    <th style="width: 20%" class="py-3 text-uppercase small fw-bold">% Su Farina</th>
+                                    <th style="width: 20%" class="py-3 text-uppercase small fw-bold">Quantità</th>
+                                    <th style="width: 10%" class="py-3 text-uppercase small fw-bold">Unità</th>
+                                    <th style="width: 10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody formArrayName="ingredients">
+                                @for (ing of ingredients.controls; track $index; let i = $index) {
+                                    <tr [formGroupName]="i">
+                                        <td class="text-center align-middle fw-bold text-muted bg-light border-end">
+                                            {{ i + 1 }}
+                                        </td>
+                                        <td class="align-middle">
+                                            <input type="text" class="form-control form-control-sm fw-bold" formControlName="name" 
+                                                [readonly]="i===0" [class.text-primary]="i===0" [class.bg-light]="i===0"
+                                                [class.is-invalid]="ingredients.at(i).get('name')?.invalid && ingredients.at(i).get('name')?.touched"
+                                                placeholder="Nome ingrediente">
+                                            @if (i===0) {
+                                                <small class="d-block text-muted mt-1 small fst-italic">Ingrediente Base</small>
+                                            }
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group input-group-sm">
+                                                <input type="number" class="form-control" formControlName="bakersPercentage" 
+                                                    (change)="updateQuantityFromPercentage(i)" 
+                                                    [readonly]="i===0">
+                                                <span class="input-group-text bg-white text-muted">%</span>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="input-group input-group-sm">
+                                                <input type="number" class="form-control" formControlName="quantity" 
+                                                    (change)="updatePercentageFromQuantity(i)">
+                                                <span class="input-group-text bg-white text-muted">val</span>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <select class="form-select form-select-sm text-muted" formControlName="unit">
+                                                <option value="g">g</option>
+                                                <option value="kg">kg</option>
+                                                <option value="ml">ml</option>
+                                            </select>
+                                        </td>
+                                        <td class="text-end align-middle pe-3">
+                                            @if (i > 0) {
+                                                <button type="button" class="btn btn-outline-danger btn-sm shadow-sm" (click)="removeIngredient(i)" title="Rimuovi ingrediente">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-3 bg-light border-top">
+                        <button type="button" class="btn btn-danger btn-sm fw-bold rounded-3" (click)="addIngredient()">
+                            <i class="fa-solid fa-plus me-1"></i> Aggiungi Ingrediente
+                        </button>
+                    </div>
+                    
+                    <!-- PIECES CALCULATOR (Bottom of Formula) -->
+                    <div class="p-4 border-top bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted fw-medium mb-2">Peso Pezzo Crudo (Opzionale)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fa-solid fa-box"></i></span>
+                                    <input type="number" class="form-control bg-light border-0 rounded-end-3" formControlName="pieceWeight" placeholder="Es. 280">
+                                    <span class="input-group-text bg-light border-0">g</span>
+                                </div>
+                                <div class="form-text">Inserisci il peso desiderato per ottenere la resa in pezzi.</div>
+                            </div>
+                            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                                <div class="d-flex justify-content-md-end gap-3 flex-wrap">
+                                    <!-- Yield Card -->
+                                    <div class="p-3 rounded text-start position-relative transition-all shadow-sm"
+                                        [class.bg-light]="calculateWaste() > 1 || calculateProjectedPieces() === 0"
+                                        [class.bg-success]="calculateWaste() <= 1 && calculateProjectedPieces() > 0"
+                                        [class.bg-opacity-10]="calculateWaste() <= 1 && calculateProjectedPieces() > 0"
+                                        [class.border]="calculateWaste() <= 1 && calculateProjectedPieces() > 0"
+                                        [class.border-success]="calculateWaste() <= 1 && calculateProjectedPieces() > 0"
+                                        style="min-width: 180px; flex: 1;">
+                                        
+                                        <small class="text-uppercase fw-bold d-block mb-1"
+                                            [class.text-muted]="calculateWaste() > 1 || calculateProjectedPieces() === 0"
+                                            [class.text-success]="calculateWaste() <= 1 && calculateProjectedPieces() > 0">
+                                            Resa Stimata
+                                        </small>
+                                        
+                                        <div class="d-flex align-items-center">
+                                            <span class="fs-4 fw-bold text-dark">{{ calculateProjectedPieces() }}</span>
+                                            <span class="text-muted ms-1">pezzi totali</span>
+                                            
+                                            <!-- Success Icon -->
+                                            @if (calculateWaste() <= 1 && calculateProjectedPieces() > 0) {
+                                                <div class="ms-auto text-success">
+                                                    <i class="fa-solid fa-circle-check fs-4" title="Ottimizzato!"></i>
+                                                </div>
+                                            }
+                                        </div>
+                                        
+                                        <div class="small border-top mt-2 pt-1" 
+                                            [class.text-muted]="calculateWaste() > 1 || calculateProjectedPieces() === 0"
+                                            [class.text-success]="calculateWaste() <= 1 && calculateProjectedPieces() > 0"
+                                            [class.border-success]="calculateWaste() <= 1 && calculateProjectedPieces() > 0"
+                                            [class.border-opacity-25]="calculateWaste() <= 1 && calculateProjectedPieces() > 0">
+                                            @if (calculateWaste() > 1 || calculateProjectedPieces() === 0) {
+                                                <span>
+                                                    Da {{ getCurrentTotalWeight() | number:'1.0-0' }}g di impasto
+                                                </span>
+                                            }
+                                            @if (calculateWaste() <= 1 && calculateProjectedPieces() > 0) {
+                                                <span class="fw-bold">
+                                                    <i class="fa-solid fa-star me-1"></i>0 Scarti! Perfetto.
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Waste/Optimization Card -->
+                                    @if (calculateWaste() > 1) {
+                                        <div class="p-3 bg-warning bg-opacity-10 rounded text-start" style="min-width: 180px; flex: 1;"> <!-- Hide if negligible waste -->
+                                            <small class="text-uppercase text-warning-emphasis fw-bold d-block mb-1">
+                                                <i class="fa-solid fa-scissors me-1"></i>Analisi Scarto
+                                            </small>
+                                            <div class="d-flex align-items-baseline">
+                                                <span class="fs-5 fw-bold text-dark">{{ calculateWaste() | number:'1.0-0' }}g</span>
+                                                <small class="text-muted ms-2">di avanzo</small>
+                                            </div>
+                                            <div class="small text-muted border-top border-warning border-opacity-25 mt-2 pt-1 clickable-suggestion" 
+                                                (click)="applyIdealPieceWeight()" 
+                                                style="cursor: pointer;" 
+                                                title="Clicca per applicare questo peso">
+                                                Usa <strong>{{ getSafeIdealPieceWeight() | number:'1.0-2' }}g</strong> per 0 scarti
+                                                <i class="fa-solid fa-circle-arrow-left ms-1 text-primary"></i>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- TAB 3: PHASES (WIZARD) -->
+        @if (activeTab() === 'phases') {
+            <div>
+                <!-- Summary Header -->
+                <div class="card bg-white border mb-4 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="text-secondary opacity-25 display-4 lh-1">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-uppercase text-muted fw-bold small mb-1 ls-1">Tempo Totale Stimato</h6>
+                                    <div class="display-6 fw-bold text-dark font-monospace">{{ getFormattedTotalTime() }}</div>
+                                </div>
+                            </div>
+                            <div class="d-none d-sm-block text-end">
+                                <div class="badge bg-light text-secondary border fw-normal py-2 px-3 rounded-pill">
+                                    <i class="fa-solid fa-calculator me-1"></i> Totale automatico
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div formArrayName="phases">
+                    @for (phase of phases.controls; track phase; let pIndex = $index) {
+                        <div [formGroupName]="pIndex" class="card mb-4 border-0 shadow-sm position-relative">
+                            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-3 flex-grow-1">
+                                    <div class="d-flex flex-column align-items-center gap-1">
+                                        <button type="button" class="btn btn-sm btn-light border-0 py-0 px-2 text-secondary" (click)="movePhaseUp(pIndex)" [disabled]="pIndex === 0" title="Sposta su">
+                                            <i class="fa-solid fa-chevron-up small"></i>
+                                        </button>
+                                        <span class="badge rounded-pill bg-dark text-white shadow-sm" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">{{pIndex + 1}}</span>
+                                        <button type="button" class="btn btn-sm btn-light border-0 py-0 px-2 text-secondary" (click)="movePhaseDown(pIndex)" [disabled]="pIndex === phases.length - 1" title="Sposta giù">
+                                            <i class="fa-solid fa-chevron-down small"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="d-flex flex-column flex-grow-1">
+                                        <div class="mb-1">
+                                            <ng-select [items]="phaseTypesList()" 
+                                                       bindLabel="name" 
+                                                       bindValue="id" 
+                                                       formControlName="phaseType" 
+                                                       [clearable]="false"
+                                                       [searchable]="true"
+                                                       placeholder="Seleziona tipo fase..."
+                                                       class="custom-phase-select border-0">
+                                                
+                                                <!-- Selected Item Template -->
+                                                <ng-template ng-label-tmp let-item="item">
+                                                    <div class="d-flex align-items-center fw-bold text-uppercase">
+                                                        <i class="me-2 fs-5" [ngClass]="item.icon || 'fa-solid fa-circle'" [style.color]="item.color || '#6c757d'"></i>
+                                                        <span [style.color]="item.color || '#6c757d'">{{ item.name }}</span>
+                                                    </div>
+                                                </ng-template>
+
+                                                <!-- Dropdown List Template -->
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="d-flex align-items-center py-1">
+                                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                                              [style.background-color]="(item.color || '#6c757d') + '20'"
+                                                              [style.color]="item.color || '#6c757d'"
+                                                              style="width: 32px; height: 32px;">
+                                                            <i [ngClass]="item.icon || 'fa-solid fa-circle'"></i>
+                                                        </div>
+                                                        <div>
+                                                            <div class="fw-bold" [style.color]="item.color || '#6c757d'">{{ item.name }}</div>
+                                                            <small class="text-muted" style="font-size: 0.75rem;">
+                                                                {{ item.isActiveWork ? 'Attiva (Lavoro)' : 'Passiva (Attesa)' }}
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                        <input type="text" class="form-control form-control-lg border-0 ps-0 fw-bold text-dark" 
+                                            [class.is-invalid]="phase.get('title')?.invalid && phase.get('title')?.touched"
+                                            formControlName="title" placeholder="Titolo Fase (es. Autolisi)" 
+                                            style="background: transparent; box-shadow: none;">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-icon btn-sm text-muted hover-danger" (click)="removePhase(pIndex)" title="Rimuovi Fase">
+                                    <i class="fa-solid fa-trash fs-5"></i>
+                                </button>
+                            </div>
+                            <div class="card-body bg-white">
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-secondary text-uppercase">Durata (min)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-stopwatch"></i></span>
+                                            <input type="number" class="form-control" formControlName="durationMinutes">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold text-secondary text-uppercase">Temp (°C)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-thermometer-half"></i></span>
+                                            <input type="number" class="form-control" formControlName="temperature">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-secondary text-uppercase">Note & Istruzioni</label>
+                                        <textarea class="form-control" formControlName="description" rows="1" placeholder="Descrivi i passaggi..."></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Phase Ingredients -->
+                                <div class="bg-light p-3 rounded-3 border border-light">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="small fw-bold text-muted mb-0 text-uppercase"><i class="fa-solid fa-basket-shopping me-1"></i> Ingredienti usati</h6>
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" 
+                                                    (click)="addAllIngredientsToPhase(pIndex)"
+                                                    [disabled]="ingredients.length === 0"
+                                                    title="Aggiungi tutti gli ingredienti con quantità totale (impasto diretto)">
+                                                <i class="fa-solid fa-layer-group me-1"></i> Tutti
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" (click)="addPhaseIngredient(pIndex)">
+                                                <i class="fa-solid fa-plus me-1"></i> Aggiungi
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    @if (getPhaseIngredients(pIndex).length === 0) {
+                                        <div class="text-center py-4 text-muted small">
+                                            <i class="fa-solid fa-circle-arrow-up d-block fs-4 mb-1 opacity-50"></i>
+                                            Nessun ingrediente associato a questa fase.
+                                        </div>
+                                    }
+
+                                    <div formArrayName="phaseIngredients">
+                                        @for (pi of getPhaseIngredients(pIndex).controls; track $index; let piIndex = $index) {
+                                            <div [formGroupName]="piIndex" class="mb-3">
+                                                <div class="d-flex gap-2 align-items-center bg-white p-2 rounded shadow-sm border w-100">
+                                                    
+                                                    <div style="flex: 2; min-width: 250px;">
+                                                        <ng-select 
+                                                            [items]="getPhaseOptions(pIndex)" 
+                                                            bindLabel="label" 
+                                                            bindValue="value" 
+                                                            groupBy="group"
+                                                            formControlName="ingredientName"
+                                                            (change)="onPhaseIngredientChange(pIndex, piIndex)"
+                                                            [clearable]="false"
+                                                            [searchable]="true"
+                                                            [trackByFn]="trackByPhaseOption"
+                                                            appendTo="body"
+                                                            placeholder="Seleziona..."
+                                                            class="custom-ng-select">
+
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="d-flex justify-content-between align-items-center w-100">
+                                                                    <span class="fw-bold text-dark">{{ item.label }}</span>
+                                                                    
+                                                                    @if (item.type === 'INGREDIENT') {
+                                                                        <div class="small ms-2 d-flex align-items-center">
+                                                                            <span [class.text-danger]="item.remaining <= 0" [class.text-success]="item.remaining > 0" class="fw-bold">
+                                                                                Res: {{ item.remaining | number:'1.0-0' }}g
+                                                                            </span>
+                                                                            <span class="text-muted opacity-50 mx-1">/</span>
+                                                                            <span class="text-muted">Tot: {{ item.total | number:'1.0-0' }}g</span>
+                                                                        </div>
+                                                                    }
+
+                                                                    @if (item.type === 'PHASE') {
+                                                                        <div class="badge bg-light text-dark border ms-2">
+                                                                            {{ item.weight | number:'1.0-0' }}g
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                    </div>
+                                                    
+                                                    <div class="vr bg-secondary opacity-25"></div>
+                                                    
+                                                    <div class="d-flex align-items-center" style="flex: 1; max-width: 120px;">
+                                                        <input type="number" class="form-control form-control-sm border-0 text-end fw-bold shadow-none pe-1" 
+                                                            formControlName="quantity" placeholder="0">
+                                                        <span class="small text-muted">g</span>
+                                                    </div>
+
+                                                    <button type="button" class="btn btn-link text-danger btn-sm ms-2" (click)="removePhaseIngredient(pIndex, piIndex)">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+
+                                                <!-- Ingredient Status Alert -->
+                                                @if (getPhaseIngredients(pIndex).at(piIndex).get('ingredientName')?.value; as iName) {
+                                                    @if (getIngredientStatus(iName, pIndex, piIndex); as status) {
+                                                        @if (status.isOver) {
+                                                            <div class="alert alert-danger d-flex align-items-center p-2 mb-0 mt-1 small rounded-2">
+                                                                <i class="fa-solid fa-triangle-exclamation me-2 fs-5"></i>
+                                                                <div class="flex-grow-1 lh-1">
+                                                                    <strong>Quantità eccessiva!</strong>
+                                                                    <div class="mt-1 opacity-75">
+                                                                        Hai usato {{ (status.used + status.currentInputVal) | number:'1.0-0' }}g su {{ status.total }}g disponibili.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        @if (!status.isOver) {
+                                                            <div class="d-flex justify-content-between px-2 mt-1 align-items-center" style="font-size: 0.75rem;">
+                                                                <span class="text-muted">Residuo: <strong>{{ status.remaining - status.currentInputVal | number:'1.0-1' }}g</strong></span>
+                                                                @if ((status.remaining - status.currentInputVal) > 0) {
+                                                                    <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none fw-bold small" 
+                                                                            style="font-size: 0.75rem;"
+                                                                            (click)="setPhaseIngredientQuantity(pIndex, piIndex, status.remaining)">
+                                                                        <i class="fa-solid fa-circle-arrow-up me-1"></i>Usa tutto
+                                                                    </button>
+                                                                }
+                                                                <span class="text-muted">Tot: {{ status.total }}g</span>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <button type="button" class="btn btn-danger w-100 py-3 rounded-3 fw-bold" (click)="addPhase()">
+                    <i class="fa-solid fa-circle-plus me-2"></i> Aggiungi Nuova Fase
+                </button>
+            </div>
+        }
+
+        <!-- TAB 4: MEDIA -->
+        @if (activeTab() === 'media') {
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-brands fa-youtube me-2" style="color: var(--kh-primary);"></i>Video & Media
+                    </h5>
+                </div>
+                <div class="card-body px-4 pb-4 pt-0">
+                    <div class="alert alert-light border text-muted small">
+                        <i class="fa-solid fa-video me-2"></i> Incolla qui i link ai video (es. YouTube, Vimeo) per mostrare l'anteprima nella ricetta.
+                    </div>
+                    
+                    <div formArrayName="videos">
+                        @for (vid of videos.controls; track $index; let vIndex = $index) {
+                            <div [formGroupName]="vIndex" class="card mb-3 border-light bg-light">
+                                <div class="card-body">
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-link"></i></span>
+                                        <input type="text" class="form-control border-start-0" formControlName="url" placeholder="https://youtube.com/..." #urlInput>
+                                        <button type="button" class="btn btn-outline-danger" (click)="removeVideo(vIndex)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Preview Box -->
+                                    @if (urlInput.value && hasEmbed(urlInput.value)) {
+                                        <div class="ratio ratio-16x9 rounded overflow-hidden mt-3 shadow-sm bg-dark">
+                                            <iframe [src]="getSafeVideoUrl(urlInput.value)" title="Video Preview" allowfullscreen></iframe>
+                                        </div>
+                                    }
+                                    @if (urlInput.value && !hasEmbed(urlInput.value)) {
+                                        <div class="mt-2 p-2 bg-white rounded border d-flex align-items-center text-muted small">
+                                            <i class="fa-solid fa-link me-2"></i> Link generico (nessuna anteprima disponibile)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <button type="button" class="btn btn-danger w-100 rounded-3 fw-bold" (click)="addVideo()">
+                        <i class="fa-solid fa-plus me-1"></i> Aggiungi Video
+                    </button>
+                </div>
+            </div>
+        }
+
+      </form>
+      </div>

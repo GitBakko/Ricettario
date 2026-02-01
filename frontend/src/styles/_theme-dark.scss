@@ -1,0 +1,194 @@
+// =================================================
+// KneadHub Dark Theme Variables
+// =================================================
+// Dark mode overrides using CSS custom properties
+// Applied when :root has [data-theme="dark"] or .theme-dark class
+
+:root[data-theme="dark"],
+:root.theme-dark {
+  // -------------------------------------------------
+  // Background Colors - Deep warm brown tones
+  // -------------------------------------------------
+  --kh-background: #0F0A05;        // Marrone scurissimo
+  --kh-background-blur: rgba(15, 10, 5, 0.9);
+  --kh-surface: #1E1A15;           // Card/container background
+  --kh-surface-elevated: #2A2420;  // Elevated surfaces (modals, dropdowns)
+  --kh-surface-hover: #352F28;     // Hover state for surfaces
+
+  // -------------------------------------------------
+  // Text Colors - Warm cream tones
+  // -------------------------------------------------
+  --kh-text-primary: #F5F0EB;      // Primary text
+  --kh-text-secondary: #C9BEB3;    // Secondary/muted text
+  --kh-text-muted: #8A7E73;        // Very muted text
+  --kh-text-on-dark: #F5F0EB;      // Same as primary in dark mode
+  --kh-text-on-primary: #1E1A15;   // Text on accent buttons (inverse)
+
+  // -------------------------------------------------
+  // Accent Colors - Slightly more vibrant for dark mode
+  // -------------------------------------------------
+  --kh-primary: #E07B2E;           // +10% saturation from #D2691E
+  --kh-primary-light: #F4A261;     // Lighter variant
+  --kh-primary-dark: #A85A1A;      // Darker variant
+
+  --kh-accent: #F7B070;            // Brighter orange for dark mode
+  --kh-accent-hover: #F9C090;      // Hover state
+
+  --kh-highlight: #FFD700;         // Gold - stays the same
+
+  // -------------------------------------------------
+  // UI Element Colors
+  // -------------------------------------------------
+  --kh-error: #FF6B6B;             // Brighter red for dark mode
+  --kh-success: #6BCB77;           // Success green
+  --kh-warning: #FFC107;           // Warning yellow
+  --kh-info: #4FC3F7;              // Info blue
+
+  --kh-like-active: #FF6B6B;       // Like heart color
+  --kh-like-inactive: rgba(255,255,255,0.7);
+
+  // -------------------------------------------------
+  // Badges
+  // -------------------------------------------------
+  --kh-badge-new: #4CAF50;
+  --kh-badge-popular: #FF9800;
+
+  // -------------------------------------------------
+  // Shadows - Darker shadows
+  // -------------------------------------------------
+  --kh-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --kh-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --kh-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --kh-shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --kh-shadow-card-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --kh-shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.6);
+
+  // -------------------------------------------------
+  // Gradients
+  // -------------------------------------------------
+  --kh-gradient-navbar: linear-gradient(135deg, #1E1A15 0%, #0F0A05 100%);
+  --kh-gradient-surface: linear-gradient(135deg, #1E1A15, #2A2420);
+  --kh-gradient-card-overlay: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(15, 10, 5, 0.7) 70%,
+    rgba(15, 10, 5, 0.95) 100%
+  );
+  --kh-gradient-button: linear-gradient(135deg, #F4A261 0%, #E8923D 100%);
+
+  // -------------------------------------------------
+  // Glassmorphism - Darker version
+  // -------------------------------------------------
+  --kh-glass-bg: rgba(30, 26, 21, 0.85);
+  --kh-glass-border: rgba(245, 240, 235, 0.1);
+  --kh-glass-blur: blur(12px);
+}
+
+// =================================================
+// Dark Theme Component Overrides
+// =================================================
+
+[data-theme="dark"],
+.theme-dark {
+  // Body/HTML background
+  background-color: var(--kh-background);
+  color: var(--kh-text-primary);
+
+  // Selection color
+  ::selection {
+    background: rgba(224, 123, 46, 0.3);
+    color: var(--kh-text-primary);
+  }
+
+  // Focus outline for accessibility
+  *:focus-visible {
+    outline: 2px solid var(--kh-primary);
+    outline-offset: 2px;
+  }
+
+  // Background image overlay adjustment
+  .app-background::before {
+    background: rgba(15, 10, 5, 0.85);
+  }
+
+  // Link colors
+  a:not(.btn):not(.kh-btn) {
+    color: var(--kh-primary-light);
+
+    &:hover {
+      color: var(--kh-accent);
+    }
+  }
+
+  // Bootstrap form controls
+  .form-control,
+  .form-select {
+    background-color: var(--kh-surface);
+    border-color: var(--kh-surface-hover);
+    color: var(--kh-text-primary);
+
+    &::placeholder {
+      color: var(--kh-text-muted);
+    }
+
+    &:focus {
+      background-color: var(--kh-surface);
+      border-color: var(--kh-primary);
+      color: var(--kh-text-primary);
+      box-shadow: 0 0 0 3px rgba(224, 123, 46, 0.15);
+    }
+  }
+
+  // Bootstrap dropdown menus
+  .dropdown-menu {
+    background-color: var(--kh-surface);
+    border-color: var(--kh-surface-hover);
+
+    .dropdown-item {
+      color: var(--kh-text-primary);
+
+      &:hover,
+      &:focus {
+        background-color: var(--kh-surface-hover);
+        color: var(--kh-text-primary);
+      }
+
+      &.active,
+      &:active {
+        background-color: var(--kh-primary);
+        color: var(--kh-text-on-primary);
+      }
+    }
+  }
+
+  // Bootstrap modals
+  .modal-content {
+    background-color: var(--kh-surface);
+    border-color: var(--kh-surface-hover);
+  }
+
+  .modal-header,
+  .modal-footer {
+    border-color: var(--kh-surface-hover);
+  }
+
+  // Scrollbar styling for webkit browsers
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--kh-surface);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--kh-surface-hover);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--kh-text-muted);
+    }
+  }
+}

@@ -1,0 +1,149 @@
+// =============================================================================
+// KneadHub Sidebar Styles - EXACT Mockup Design
+// =============================================================================
+
+.kh-sidebar-container {
+  width: 100px;
+  min-height: 100vh;
+  height: 100%;
+  background: #FFFFFF; // White background like mockup
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--kh-spacing-lg) var(--kh-spacing-xs) var(--kh-spacing-lg);
+
+  @media (max-width: 1199px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: var(--kh-z-fixed);
+    transform: translateX(-100%);
+    transition: transform var(--kh-transition-slow) ease-out;
+    box-shadow: var(--kh-shadow-xl);
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Logo - Full logo image
+// -----------------------------------------------------------------------------
+.kh-sidebar-logo {
+  margin-bottom: var(--kh-spacing-lg);
+  padding: var(--kh-spacing-xs);
+}
+
+.kh-logo-link {
+  display: block;
+  text-decoration: none;
+}
+
+.kh-logo-img {
+  width: 90px;
+  height: auto;
+  object-fit: contain;
+}
+
+// -----------------------------------------------------------------------------
+// Navigation - Simple icons with text below
+// -----------------------------------------------------------------------------
+.kh-sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--kh-spacing-sm);
+  width: 100%;
+}
+
+.kh-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 76px;
+  padding: var(--kh-spacing-sm) var(--kh-spacing-xs);
+  color: var(--kh-text-secondary);
+  text-decoration: none;
+  border-radius: var(--kh-radius-md);
+  transition: all var(--kh-transition-fast);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+
+  i {
+    font-size: 1.375rem;
+    transition: color var(--kh-transition-fast);
+  }
+
+  span {
+    font-family: var(--kh-font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  &:hover {
+    color: var(--kh-primary);
+    background: rgba(244, 228, 208, 0.3);
+  }
+
+  // Active state - rounded box like mockup
+  &.active {
+    background: rgba(244, 228, 208, 0.6);
+    color: var(--kh-primary-dark);
+    
+    span {
+      font-weight: 600;
+    }
+  }
+
+  // Smaller variant for admin/settings items
+  &.kh-nav-item-sm {
+    width: 68px;
+    padding: var(--kh-spacing-xs);
+    gap: 4px;
+
+    i {
+      font-size: 1rem;
+    }
+
+    span {
+      font-size: 0.6875rem;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Divider
+// -----------------------------------------------------------------------------
+.kh-nav-divider {
+  width: 50px;
+  height: 1px;
+  background: var(--kh-text-muted);
+  opacity: 0.3;
+  margin: var(--kh-spacing-sm) 0;
+}
+
+// -----------------------------------------------------------------------------
+// Backdrop
+// -----------------------------------------------------------------------------
+.kh-sidebar-backdrop {
+  display: none;
+
+  @media (max-width: 1199px) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--kh-z-fixed) - 1);
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "RECIPES": "Recipes",
+    "COMMUNITY": "Community",
+    "PROFILE": "Profile",
+    "SEARCH_PLACEHOLDER": "Search recipes, tips, and more...",
+    "LOGOUT": "Logout",
+    "DARK_MODE": "Dark mode",
+    "LIGHT_MODE": "Light mode",
+    "LANGUAGE": "Language"
+  },
+  "SIDEBAR": {
+    "HOME": "Home",
+    "RECIPES": "Recipes", 
+    "COMMUNITY": "Community",
+    "PROFILE": "Profile",
+    "SETTINGS": "Settings",
+    "HELP": "Help"
+  },
+  "RECIPE_LIST": {
+    "TITLE": "Your Recipes",
+    "SUBTITLE": "Archive, organize and perfect your creations",
+    "NEW_RECIPE": "New Recipe",
+    "ALL_CATEGORIES": "All",
+    "RESET_FILTERS": "Reset",
+    "EMPTY_TITLE": "No recipes found",
+    "EMPTY_MESSAGE": "Try changing filters or create your first recipe",
+    "CREATE_RECIPE": "Create Recipe",
+    "SETTINGS": "Settings",
+    "MANAGE_PHASES": "Manage Phases",
+    "MANAGE_CATEGORIES": "Manage Categories",
+    "MANAGE_TAGS": "Manage Tags"
+  },
+  "RECIPE_CARD": {
+    "NEW": "New",
+    "POPULAR": "Popular",
+    "ADD_FAVORITE": "Add to favorites",
+    "REMOVE_FAVORITE": "Remove from favorites"
+  },
+  "FEATURED_BAKER": {
+    "TITLE": "Featured Baker",
+    "CONNECT": "Connect",
+    "RECIPES": "recipes"
+  },
+  "TRENDING": {
+    "TITLE": "Trending Now"
+  },
+  "COMMON": {
+    "LOADING": "Loading...",
+    "ERROR": "An error occurred",
+    "RETRY": "Retry",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "VIEW": "View",
+    "CLOSE": "Close"
+  },
+  "DIFFICULTY": {
+    "EASY": "Easy",
+    "MEDIUM": "Medium",
+    "HARD": "Hard",
+    "PROFESSIONAL": "Pro"
+  },
+  "COMING_SOON": {
+    "TITLE": "Coming Soon!",
+    "MESSAGE": "This section will be available soon.",
+    "BACK_HOME": "Back to Home"
+  },
+  "LANGUAGE": {
+    "LABEL": "Language",
+    "IT": "Italiano",
+    "EN": "English"
+  },
+  "LOGIN": {
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "SIGN_IN": "Sign In",
+    "SIGNING_IN": "Signing in...",
+    "SIGN_UP": "Sign Up",
+    "FORGOT_PASSWORD": "Forgot Password",
+    "NO_ACCOUNT": "Don't have an account?",
+    "ERROR_INVALID": "Invalid credentials or server error."
+  }
+}

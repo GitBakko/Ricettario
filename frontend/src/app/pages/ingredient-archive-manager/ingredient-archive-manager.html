@@ -1,0 +1,446 @@
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h1 class="display-6 fw-bold mb-1" style="font-family: var(--kh-font-display); color: var(--kh-text-primary);">
+                Archivio Ingredienti
+            </h1>
+            <p class="text-muted mb-0">Gestisci gli ingredienti riutilizzabili con proprietà e conversioni.</p>
+        </div>
+        <a routerLink="/" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i>Torna alla Home
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Form Section -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 2rem; z-index: 10;">
+                <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-solid fa-plus-circle me-2" style="color: var(--kh-primary);"></i>
+                        {{ editingId() ? 'Modifica Ingrediente' : 'Nuovo Ingrediente' }}
+                    </h5>
+                </div>
+                <div class="card-body px-4 pb-4 pt-0">
+                    <form (ngSubmit)="save()">
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Nome *</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" 
+                                   [(ngModel)]="formModel.name" name="name" 
+                                   placeholder="Es. Farina Manitoba" required>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Categoria</label>
+                            <ng-select [(ngModel)]="formModel.category" name="category" 
+                                       [clearable]="false"
+                                       [items]="categories" 
+                                       bindValue="value" 
+                                       bindLabel="label"
+                                       class="custom-ng-select">
+                                <ng-template ng-label-tmp let-item="item">
+                                    <i [class]="item.icon + ' me-2'" style="color: var(--kh-primary);"></i>{{ item.label }}
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <i [class]="item.icon + ' me-2'"></i>{{ item.label }}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+
+                        <!-- Icon & Color -->
+                        <div class="row g-2 mb-3">
+                            <div class="col-8">
+                                <label class="form-label small text-muted fw-medium mb-2">Icona</label>
+                                <app-icon-picker 
+                                    [icons]="availableIcons" 
+                                    [value]="formModel.icon || 'fa-solid fa-bowl-food'"
+                                    [previewColor]="formModel.color || '#6c757d'"
+                                    (valueChange)="formModel.icon = $event">
+                                </app-icon-picker>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label small text-muted fw-medium mb-2">Colore</label>
+                                <div class="d-flex align-items-center bg-light border-0 rounded-3 p-1">
+                                    <input type="color" class="form-control form-control-color border-0 bg-transparent w-100" 
+                                           [(ngModel)]="formModel.color" name="color" title="Scegli colore">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Default Unit -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Unità predefinita</label>
+                            <select class="form-select bg-light border-0 rounded-3" 
+                                    [(ngModel)]="formModel.defaultUnit" name="defaultUnit">
+                                <option value="g">Grammi (g)</option>
+                                <option value="ml">Millilitri (ml)</option>
+                                <option value="pz">Pezzi (pz)</option>
+                                <option value="cucchiaio">Cucchiaio</option>
+                                <option value="cucchiaino">Cucchiaino</option>
+                            </select>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Descrizione</label>
+                            <textarea class="form-control bg-light border-0 rounded-3" 
+                                      [(ngModel)]="formModel.description" name="description" 
+                                      rows="2" placeholder="Note o descrizione opzionale"></textarea>
+                        </div>
+
+                        <!-- Custom Properties -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label small text-muted fw-medium mb-0">
+                                    Proprietà Personalizzate
+                                </label>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" 
+                                        (click)="addCustomProperty()">
+                                    <i class="fa-solid fa-plus me-1"></i> Aggiungi
+                                </button>
+                            </div>
+                            
+                            @if (customProperties.length === 0) {
+                                <div class="text-muted small fst-italic text-center py-3 bg-light rounded-3">
+                                    <i class="fa-solid fa-info-circle me-1"></i>
+                                    es. W, Proteine, P/L per le farine
+                                </div>
+                            }
+
+                            @for (prop of customProperties; track $index) {
+                                <div class="d-flex gap-2 mb-2 align-items-center">
+                                    <input type="text" class="form-control form-control-sm bg-light border-0 rounded-3" 
+                                           [(ngModel)]="prop.label" [name]="'propLabel' + $index"
+                                           placeholder="Label (es. W)">
+                                    <input type="text" class="form-control form-control-sm bg-light border-0 rounded-3" 
+                                           [(ngModel)]="prop.value" [name]="'propValue' + $index"
+                                           placeholder="Valore (es. 380)">
+                                    <button type="button" class="btn btn-sm btn-light text-danger rounded-3" 
+                                            (click)="removeCustomProperty($index)">
+                                        <i class="fa-solid fa-times"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Preview -->
+                        <div class="mb-4">
+                            <label class="form-label small text-muted fw-medium mb-2">Anteprima</label>
+                            <div class="p-3 rounded-3 border text-center d-flex align-items-center justify-content-center gap-2" 
+                                 [style.background-color]="(formModel.color || '#6c757d') + '20'" 
+                                 [style.color]="formModel.color || '#6c757d'">
+                                <i [class]="(formModel.icon || 'fa-solid fa-bowl-food') + ' fs-4'"></i>
+                                <span class="fw-bold">{{ formModel.name || 'Nome Ingrediente' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary py-2 rounded-3" [disabled]="saving()">
+                                @if (saving()) {
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                }
+                                {{ editingId() ? 'Aggiorna Modifiche' : 'Crea Ingrediente' }}
+                            </button>
+                            @if (editingId()) {
+                                <button type="button" class="btn btn-light text-muted py-2 rounded-3" (click)="cancel()">
+                                    Annulla
+                                </button>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- List Section -->
+        <div class="col-lg-8">
+            @if (loading()) {
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                    </div>
+                </div>
+            } @else if (ingredients().length === 0) {
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fa-solid fa-wheat-awn display-1 text-muted mb-3"></i>
+                        <h4 class="text-muted">Nessun ingrediente</h4>
+                        <p class="text-muted mb-0">Crea il tuo primo ingrediente per iniziare.</p>
+                    </div>
+                </div>
+            } @else {
+                <!-- Search & Filter -->
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body py-3">
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="fa-solid fa-search text-muted"></i>
+                                    </span>
+                                    <input type="text" class="form-control bg-light border-0" 
+                                           placeholder="Cerca ingrediente..." 
+                                           [ngModel]="searchQuery()" 
+                                           (ngModelChange)="searchQuery.set($event)">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <ng-select [items]="categories" 
+                                           bindValue="value" 
+                                           bindLabel="label"
+                                           placeholder="Tutte le categorie"
+                                           [clearable]="true"
+                                           [ngModel]="filterCategory()"
+                                           (ngModelChange)="filterCategory.set($event)"
+                                           class="custom-ng-select">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <i [class]="item.icon + ' me-1'"></i> {{ item.label }}
+                                    </ng-template>
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <i [class]="item.icon + ' me-2'"></i>{{ item.label }}
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    {{ filteredIngredients().length }} elementi
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ingredients Table -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                        <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                            <i class="fa-solid fa-list me-2" style="color: var(--kh-primary);"></i>Ingredienti Archiviati
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4 py-3 text-muted small fw-medium border-0">Nome</th>
+                                        <th class="py-3 text-muted small fw-medium border-0">Categoria</th>
+                                        <th class="py-3 text-muted small fw-medium border-0">Proprietà</th>
+                                        <th class="py-3 text-muted small fw-medium border-0 text-center">Conversioni</th>
+                                        <th class="text-end pe-4 py-3 text-muted small fw-medium border-0">Azioni</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (ing of filteredIngredients(); track ing.id) {
+                                        <tr [class.table-active]="selectedIngredient()?.id === ing.id"
+                                            [class.bg-warning-subtle]="editingId() === ing.id"
+                                            (click)="selectIngredient(ing)"
+                                            style="cursor: pointer;">
+                                            <td class="ps-4">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center ingredient-icon" 
+                                                         [style.background-color]="(ing.color || '#6c757d') + '30'"
+                                                         [style.color]="ing.color || '#6c757d'">
+                                                        <i [class]="ing.icon || 'fa-solid fa-bowl-food'"></i>
+                                                    </div>
+                                                    <div>
+                                                        <span class="fw-bold text-dark">{{ ing.name }}</span>
+                                                        @if (ing.isSystemDefault) {
+                                                            <span class="badge bg-secondary ms-2 small">Sistema</span>
+                                                        }
+                                                        @if (ing.description) {
+                                                            <div class="text-muted small text-truncate" style="max-width: 200px;">
+                                                                {{ ing.description }}
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill px-3 py-2" 
+                                                      style="background-color: rgba(var(--bs-primary-rgb), 0.1); color: var(--bs-primary);">
+                                                    <i [class]="getCategoryIcon(ing.category) + ' me-1'"></i>
+                                                    {{ getCategoryLabel(ing.category) }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (ing.customProperties?.length) {
+                                                    <div class="d-flex flex-wrap gap-1">
+                                                        @for (prop of ing.customProperties.slice(0, 3); track $index) {
+                                                            <span class="badge bg-light text-dark">
+                                                                {{ prop.label }}: {{ prop.value }}
+                                                            </span>
+                                                        }
+                                                        @if (ing.customProperties.length > 3) {
+                                                            <span class="badge bg-light text-muted">
+                                                                +{{ ing.customProperties.length - 3 }}
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                } @else {
+                                                    <span class="text-muted small">-</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge bg-info-subtle text-info rounded-pill px-3">
+                                                    <i class="fa-solid fa-exchange-alt me-1"></i>
+                                                    {{ ing.conversionCount }}
+                                                </span>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <button class="btn btn-sm btn-light text-warning me-1 rounded-3" 
+                                                        (click)="edit(ing); $event.stopPropagation()" title="Modifica">
+                                                    <i class="fa-solid fa-pencil"></i>
+                                                </button>
+                                                @if (!ing.isSystemDefault) {
+                                                    <button class="btn btn-sm btn-light text-danger rounded-3" 
+                                                            (click)="delete(ing); $event.stopPropagation()" title="Elimina">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                } @else {
+                                                    <button class="btn btn-sm btn-light text-muted rounded-3" disabled title="Default di sistema">
+                                                        <i class="fa-solid fa-lock"></i>
+                                                    </button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Ingredient Details -->
+                @if (selectedIngredient(); as ing) {
+                    <div class="card border-0 shadow-sm mt-3">
+                        <div class="card-header py-3 px-4 d-flex align-items-center" 
+                             [style.background-color]="(ing.color || '#6c757d') + '15'">
+                            <i [class]="(ing.icon || 'fa-solid fa-bowl-food') + ' me-2 fs-5'" 
+                               [style.color]="ing.color || '#6c757d'"></i>
+                            <span class="fw-bold" [style.color]="ing.color || '#6c757d'">{{ ing.name }}</span>
+                            <span class="ms-auto badge bg-white text-dark">{{ getCategoryLabel(ing.category) }}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <!-- Properties -->
+                                @if (ing.customProperties?.length) {
+                                    <div class="col-md-6">
+                                        <h6 class="small text-muted fw-bold text-uppercase mb-2">
+                                            <i class="fa-solid fa-tags me-1"></i> Proprietà
+                                        </h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @for (prop of ing.customProperties; track $index) {
+                                                <span class="badge bg-primary-subtle text-primary px-3 py-2">
+                                                    <strong>{{ prop.label }}:</strong> {{ prop.value }}
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+
+                                <!-- Conversions -->
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="small text-muted fw-bold text-uppercase mb-0">
+                                            <i class="fa-solid fa-exchange-alt me-1"></i> Conversioni
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3" 
+                                                (click)="openConversionForm()"
+                                                [disabled]="availableForConversion().length === 0">
+                                            <i class="fa-solid fa-plus me-1"></i> Aggiungi
+                                        </button>
+                                    </div>
+
+                                    @if (loadingConversions()) {
+                                        <div class="text-center py-2">
+                                            <div class="spinner-border spinner-border-sm text-primary"></div>
+                                        </div>
+                                    } @else if (conversions().length === 0) {
+                                        <div class="text-muted small fst-italic py-2">
+                                            Nessuna conversione definita
+                                        </div>
+                                    } @else {
+                                        <div class="list-group list-group-flush">
+                                            @for (conv of conversions(); track conv.id) {
+                                                <div class="list-group-item px-0 py-2 d-flex align-items-center gap-2 border-0">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                         style="width: 28px; height: 28px;"
+                                                         [style.background-color]="(conv.toIngredientColor || '#6c757d') + '30'"
+                                                         [style.color]="conv.toIngredientColor || '#6c757d'">
+                                                        <i [class]="conv.toIngredientIcon || 'fa-solid fa-bowl-food'" 
+                                                           style="font-size: 0.75rem;"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <span class="fw-medium small">{{ conv.toIngredientName }}</span>
+                                                        <span class="text-muted small ms-2">
+                                                            ({{ formatRatio(conv.conversionRatio) }})
+                                                        </span>
+                                                        @if (conv.isReverse) {
+                                                            <span class="badge bg-secondary ms-1" style="font-size: 0.65rem;">inversa</span>
+                                                        }
+                                                    </div>
+                                                    @if (!conv.isReverse) {
+                                                        <button class="btn btn-sm btn-link text-danger p-0" 
+                                                                (click)="deleteConversion(conv)">
+                                                            <i class="fa-solid fa-times"></i>
+                                                        </button>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+
+                                    <!-- Add Conversion Form -->
+                                    @if (showConversionForm()) {
+                                        <div class="border-top pt-3 mt-2">
+                                            <div class="mb-2">
+                                                <label class="form-label small text-muted">Ingrediente alternativo</label>
+                                                <ng-select [(ngModel)]="conversionForm.toIngredientId" 
+                                                           [items]="availableForConversion()"
+                                                           bindValue="id" 
+                                                           bindLabel="name"
+                                                           placeholder="Seleziona..."
+                                                           class="custom-ng-select">
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <i [class]="item.icon + ' me-2'" [style.color]="item.color"></i>
+                                                        {{ item.name }}
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div>
+                                            <div class="row g-2 mb-2">
+                                                <div class="col-5">
+                                                    <label class="form-label small text-muted">Rapporto</label>
+                                                    <input type="number" class="form-control form-control-sm bg-light border-0 rounded-3" 
+                                                           [(ngModel)]="conversionForm.conversionRatio" 
+                                                           step="0.01" min="0.01">
+                                                </div>
+                                                <div class="col-7">
+                                                    <label class="form-label small text-muted">Note</label>
+                                                    <input type="text" class="form-control form-control-sm bg-light border-0 rounded-3" 
+                                                           [(ngModel)]="conversionForm.notes"
+                                                           placeholder="Opzionale">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-sm btn-primary rounded-3" (click)="saveConversion()">
+                                                    <i class="fa-solid fa-check me-1"></i> Salva
+                                                </button>
+                                                <button class="btn btn-sm btn-light rounded-3" (click)="cancelConversionForm()">
+                                                    Annulla
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

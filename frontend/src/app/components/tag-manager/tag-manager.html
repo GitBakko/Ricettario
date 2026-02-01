@@ -1,0 +1,136 @@
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div>
+            <h1 class="display-6 fw-bold mb-1" style="font-family: var(--kh-font-display); color: var(--kh-text-primary);">Gestione Tags</h1>
+            <p class="text-muted mb-0">Crea e gestisci i tags per etichettare le tue ricette.</p>
+        </div>
+        <a routerLink="/" class="btn btn-outline-secondary rounded-pill px-4">
+            <i class="fa-solid fa-arrow-left me-2"></i>Torna alla Home
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Form Section -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 2rem; z-index: 10;">
+                <div class="card-header bg-white border-bottom-0 py-4 px-4">
+                    <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                        <i class="fa-solid fa-tag me-2" style="color: var(--kh-primary);"></i>{{ editingId() ? 'Modifica Tag' : 'Nuovo Tag' }}
+                    </h5>
+                </div>
+                <div class="card-body px-4 pb-4 pt-0">
+                    <form (submit)="save()">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Nome</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-3" [(ngModel)]="formModel.name" name="name" placeholder="Es. vegano, senza glutine" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small text-muted fw-medium mb-2">Colore</label>
+                            <div class="d-flex gap-2 align-items-center">
+                                <div class="flex-grow-1 bg-light rounded-3 p-1">
+                                    <input type="color" class="form-control form-control-color border-0 bg-transparent w-100" 
+                                           [(ngModel)]="formModel.color" name="color" title="Scegli colore">
+                                </div>
+                                <button type="button" class="btn btn-light rounded-3" (click)="regenerateColor()" title="Genera colore casuale">
+                                    <i class="fa-solid fa-shuffle"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small text-muted fw-medium mb-2">Anteprima</label>
+                            <div class="p-3 rounded-3 border text-center" 
+                                 [style.background-color]="formModel.color + '20'">
+                                <span class="badge rounded-pill px-3 py-2" [style.background-color]="formModel.color">
+                                    {{ formModel.name || 'Anteprima Tag' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger py-2 rounded-3">
+                                {{ editingId() ? 'Aggiorna Modifiche' : 'Crea Tag' }}
+                            </button>
+                            @if (editingId()) {
+                                <button type="button" class="btn btn-light text-muted py-2 rounded-3" (click)="cancel()">Annulla</button>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- List Section -->
+        <div class="col-lg-8">
+            <!-- Search -->
+            <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-0 rounded-start-3">
+                        <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                    </span>
+                    <input type="text" 
+                           class="form-control bg-light border-0 rounded-end-3" 
+                           placeholder="Cerca tags..."
+                           [(ngModel)]="searchQuery"
+                           (ngModelChange)="onSearchChange()">
+                </div>
+            </div>
+
+            @if (loading()) {
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                    </div>
+                </div>
+            } @else if (filteredTags().length === 0) {
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fa-solid fa-tags display-1 text-muted mb-3"></i>
+                        @if (searchQuery) {
+                            <h4 class="text-muted">Nessun tag trovato</h4>
+                            <p class="text-muted mb-0">Prova a cercare con un termine diverso.</p>
+                        } @else {
+                            <h4 class="text-muted">Nessun tag</h4>
+                            <p class="text-muted mb-0">Crea il tuo primo tag per etichettare le ricette.</p>
+                        }
+                    </div>
+                </div>
+            } @else {
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.5px;">
+                            <i class="fa-solid fa-tags me-2" style="color: var(--kh-primary);"></i>Tags Esistenti
+                        </h5>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">{{ filteredTags().length }} tags</span>
+                    </div>
+                    <div class="card-body p-4 pt-0">
+                        <div class="d-flex flex-wrap gap-2">
+                            @for (tag of filteredTags(); track tag.id) {
+                                <div class="tag-item d-inline-flex align-items-center rounded-pill px-3 py-2"
+                                     [style.background-color]="tag.color + '20'"
+                                     [style.border-color]="tag.color"
+                                     [class.editing]="editingId() === tag.id">
+                                    <span class="tag-dot me-2" [style.background-color]="tag.color"></span>
+                                    <span class="tag-name fw-medium" [style.color]="tag.color">{{ tag.name }}</span>
+                                    @if (tag.usageCount > 0) {
+                                        <span class="badge bg-secondary ms-2 small">{{ tag.usageCount }}</span>
+                                    }
+                                    <div class="tag-actions ms-2">
+                                        <button class="btn btn-sm p-1 text-warning rounded-2" (click)="edit(tag)" title="Modifica">
+                                            <i class="fa-solid fa-pencil small"></i>
+                                        </button>
+                                        <button class="btn btn-sm p-1 text-danger rounded-2" (click)="delete(tag)" title="Elimina">
+                                            <i class="fa-solid fa-trash small"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

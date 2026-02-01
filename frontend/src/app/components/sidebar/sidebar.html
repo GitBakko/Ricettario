@@ -1,0 +1,98 @@
+<!-- Sidebar Navigation - Mockup Style -->
+<aside class="kh-sidebar-container" [class.open]="isOpen()">
+  <!-- Logo Section -->
+  <div class="kh-sidebar-logo">
+    <a routerLink="/" class="kh-logo-link">
+      <img src="assets/images/logo_light.png" alt="KneadHub" class="kh-logo-img">
+    </a>
+  </div>
+
+  <!-- Main Navigation -->
+  <nav class="kh-sidebar-nav">
+    <!-- Home -->
+    <a 
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: true}"
+      class="kh-nav-item"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+
+    <!-- Create Recipe -->
+    <a 
+      routerLink="/create"
+      routerLinkActive="active"
+      class="kh-nav-item"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-plus"></i>
+      <span>Crea</span>
+    </a>
+
+    <!-- Community -->
+    <a 
+      routerLink="/community"
+      routerLinkActive="active"
+      class="kh-nav-item"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-users"></i>
+      <span>Community</span>
+    </a>
+
+    <!-- Profile -->
+    <a 
+      routerLink="/profile"
+      routerLinkActive="active"
+      class="kh-nav-item"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-user"></i>
+      <span>Profilo</span>
+    </a>
+
+    <!-- Divider -->
+    <div class="kh-nav-divider"></div>
+
+    <!-- Admin Section -->
+    <a 
+      routerLink="/categories"
+      routerLinkActive="active"
+      class="kh-nav-item kh-nav-item-sm"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-folder"></i>
+      <span>Categorie</span>
+    </a>
+
+    <a 
+      routerLink="/tags"
+      routerLinkActive="active"
+      class="kh-nav-item kh-nav-item-sm"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-tags"></i>
+      <span>Tags</span>
+    </a>
+
+    <a 
+      routerLink="/phase-types"
+      routerLinkActive="active"
+      class="kh-nav-item kh-nav-item-sm"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-list-check"></i>
+      <span>Fasi</span>
+    </a>
+
+    <a 
+      routerLink="/ingredients"
+      routerLinkActive="active"
+      class="kh-nav-item kh-nav-item-sm"
+      (click)="onNavItemClick()">
+      <i class="fa-solid fa-wheat-awn"></i>
+      <span>Ingredienti</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- Backdrop for mobile -->
+@if (isOpen()) {
+  <div class="kh-sidebar-backdrop" (click)="onBackdropClick()"></div>
+}

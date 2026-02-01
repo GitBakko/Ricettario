@@ -1,0 +1,281 @@
+// =============================================================================
+// KneadHub Login Page - Glassmorphism Style
+// =============================================================================
+// Matches the mockup: blurred kitchen background + glass card centered
+
+.kh-login-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--kh-spacing-lg);
+  overflow: hidden;
+}
+
+// -----------------------------------------------------------------------------
+// Background with blur effect
+// -----------------------------------------------------------------------------
+.kh-login-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/images/background-kitchen.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  
+  // No blur - sharp background as in mockup
+  // The card provides the glass effect
+}
+
+// -----------------------------------------------------------------------------
+// Login Card - Glassmorphism
+// -----------------------------------------------------------------------------
+.kh-login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+  padding: 3rem 2.5rem;
+  
+  // Glassmorphism effect
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  
+  // Animation on load
+  animation: kh-card-entry 0.5s ease-out;
+}
+
+// -----------------------------------------------------------------------------
+// Logo Section
+// -----------------------------------------------------------------------------
+.kh-login-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.kh-login-logo-img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(139, 69, 19, 0.15));
+}
+
+// -----------------------------------------------------------------------------
+// Form
+// -----------------------------------------------------------------------------
+.kh-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// -----------------------------------------------------------------------------
+// Input Groups - Underline style like mockup
+// -----------------------------------------------------------------------------
+.kh-input-group {
+  position: relative;
+}
+
+.kh-input {
+  width: 100%;
+  padding: 0.75rem 0;
+  font-family: var(--kh-font-body);
+  font-size: 1rem;
+  color: var(--kh-text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+  border-radius: 0; // No rounded corners - underline style
+  outline: none;
+  box-shadow: none; // No glow on focus
+  transition: border-color var(--kh-transition-base);
+  
+  &::placeholder {
+    color: var(--kh-text-secondary);
+    font-weight: 400;
+  }
+  
+  &:focus {
+    border-bottom-color: var(--kh-primary);
+    outline: none;
+    box-shadow: none; // No glow on focus
+  }
+  
+  &:focus + .kh-input-line {
+    transform: scaleX(1);
+  }
+}
+
+.kh-input-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--kh-primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--kh-transition-base);
+}
+
+// -----------------------------------------------------------------------------
+// Sign In Button - Warm orange as in mockup
+// -----------------------------------------------------------------------------
+.kh-login-btn {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  font-family: var(--kh-font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #D4A574 0%, #C4956A 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--kh-transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 16px rgba(212, 165, 116, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #C4956A 0%, #B4855A 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+// Spinner for loading state
+.kh-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: kh-rotate 0.8s linear infinite;
+}
+
+// -----------------------------------------------------------------------------
+// Links - Sign Up and Forgot Password
+// -----------------------------------------------------------------------------
+.kh-login-link {
+  display: block;
+  text-align: center;
+  font-family: var(--kh-font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--kh-transition-fast);
+  
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.kh-login-link-signup {
+  color: var(--kh-text-primary);
+  margin-top: 0.5rem;
+  
+  &:hover {
+    color: var(--kh-primary);
+  }
+}
+
+.kh-login-link-forgot {
+  color: var(--kh-text-secondary);
+  font-size: 0.9rem;
+  
+  &:hover {
+    color: var(--kh-primary);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Error Message
+// -----------------------------------------------------------------------------
+.kh-login-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(230, 57, 70, 0.1);
+  border-radius: 8px;
+  color: var(--kh-error);
+  font-size: 0.875rem;
+  
+  i {
+    font-size: 1rem;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Responsive
+// -----------------------------------------------------------------------------
+@media (max-width: 480px) {
+  .kh-login-card {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+    border-radius: 20px;
+  }
+  
+  .kh-login-logo-text {
+    font-size: 1.75rem;
+  }
+  
+  .kh-login-logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Dark mode support
+// -----------------------------------------------------------------------------
+:host-context([data-theme="dark"]),
+:host-context(.theme-dark) {
+  .kh-login-card {
+    background: rgba(30, 26, 21, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .kh-input {
+    color: var(--kh-text-primary);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+    
+    &::placeholder {
+      color: var(--kh-text-muted);
+    }
+  }
+  
+  .kh-login-link-signup {
+    color: var(--kh-text-primary);
+  }
+  
+  .kh-login-link-forgot {
+    color: var(--kh-text-secondary);
+  }
+}

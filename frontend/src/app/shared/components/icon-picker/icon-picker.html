@@ -1,0 +1,61 @@
+<div class="icon-picker">
+  <!-- Trigger Button -->
+  <button type="button" 
+          class="icon-picker-trigger form-control bg-light border-0 rounded-3 d-flex align-items-center gap-2"
+          (click)="toggleDropdown()"
+          [class.open]="isOpen()">
+    @if (selectedIcon(); as icon) {
+      <span class="icon-preview" [style.color]="previewColor()">
+        <i [class]="icon.value"></i>
+      </span>
+      <span class="icon-label flex-grow-1 text-start">{{ getCleanLabel(icon.label) }}</span>
+    } @else {
+      <span class="icon-preview text-muted">
+        <i class="fa-solid fa-icons"></i>
+      </span>
+      <span class="icon-label flex-grow-1 text-start text-muted">{{ placeholder() }}</span>
+    }
+    <i class="fa-solid fa-chevron-down dropdown-arrow" [class.rotate]="isOpen()"></i>
+  </button>
+
+  <!-- Dropdown Panel -->
+  @if (isOpen()) {
+    <div class="icon-picker-dropdown shadow-lg rounded-3">
+      <!-- Search -->
+      <div class="dropdown-search p-2 border-bottom">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-transparent border-0">
+            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+          </span>
+          <input #searchInput
+                 type="text"
+                 class="form-control border-0 bg-transparent"
+                 placeholder="Cerca icona..."
+                 [ngModel]="searchText()"
+                 (ngModelChange)="searchText.set($event)">
+        </div>
+      </div>
+
+      <!-- Icon Grid -->
+      <div class="icon-grid p-2">
+        @for (icon of filteredIcons(); track icon.value) {
+          <button type="button"
+                  class="icon-option"
+                  [class.selected]="icon.value === value()"
+                  [title]="icon.label"
+                  (click)="selectIcon(icon)">
+            <span class="icon-display" [style.color]="icon.value === value() ? previewColor() : 'inherit'">
+              <i [class]="icon.value"></i>
+            </span>
+            <span class="icon-name small">{{ getCleanLabel(icon.label) }}</span>
+          </button>
+        } @empty {
+          <div class="text-center text-muted py-3 w-100">
+            <i class="fa-solid fa-search me-1"></i>
+            Nessuna icona trovata
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
